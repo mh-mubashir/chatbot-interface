@@ -27,101 +27,101 @@ export const chatbotFlow: Record<string, FlowNode> = {
   undergrad_main: {
     id: "undergrad_main",
     type: "category",
-    message: "Please select the area you need help with:",
+    message: "Please select a resource:",
     options: [
-      { label: "Course Registration and Scheduling", next: "course_reg" },
-      { label: "Academic Support", next: "academic_support" },
-      { label: "Degree Audit, Grades, Transcripts", next: "degree_audit" },
-      { label: "Meet with an Academic Advisor", next: "advisor_meeting" },
-      { label: "Academic Planning and Major/Minor Exploration", next: "academic_planning" }
+      { label: "Academic Advising and Support Resources", next: "advising_support" }
     ]
   },
-  course_reg: {
-    id: "course_reg",
+  advising_support: {
+    id: "advising_support",
     type: "sub_option",
-    message: "What specific help do you need with course registration?",
+    message: "Which resource do you need help with?",
     options: [
-      { label: "How to Add/Drop a course?", next: "add_drop" },
-      { label: "How many courses can I take in a semester?", next: "course_limit" },
-      { label: "When can I register for classes?", next: "registration_timing" },
-      { label: "I have a hold preventing me from registering", next: "hold" },
-      { label: "How does the waitlist process work?", next: "waitlist" }
+      { label: "Academic Advising", next: "academic_advising" },
+      { label: "COE Tutoring Center", next: "coe_tutoring" },
+      { label: "Disability Access Services", next: "disability_access" },
+      { label: "First Year Engineering Learning & Innovation Center", next: "fyelic" },
+      { label: "Knack and Writing Center", next: "knack_writing" },
+      { label: "Neurodiversity Initiative", next: "neurodiversity" }
     ]
   },
-  academic_support: {
-    id: "academic_support",
+  academic_advising: {
+    id: "academic_advising",
     type: "sub_option",
-    message: "The team is actively working to complete this flow. Please check back soon or contact academic support directly.",
-    options: [{ label: "Continue", next: "satisfaction" }]
-  },
-  degree_audit: {
-    id: "degree_audit",
-    type: "sub_option",
-    message: "The team is actively working to complete this flow. Please check back soon or contact the registrar's office directly.",
-    options: [{ label: "Continue", next: "satisfaction" }]
-  },
-  advisor_meeting: {
-    id: "advisor_meeting",
-    type: "sub_option",
-    message: "How can we help you connect with an Academic Advisor?",
+    message: "Select your question:",
     options: [
-      { label: "How can my Academic Advisor help me?", next: "advisor_help" },
-      { label: "How do I schedule an appointment with my Academic Advisor?", next: "advisor_schedule" },
-      { label: "Where can I find who my Academic Advisor is?", next: "find_advisor" }
+      { label: "Where is the COE Academic Advising Office located?", next: "advising_location" },
+      { label: "Where do I find who my academic advisor is?", next: "find_advisor" },
+      { label: "How do I schedule an appointment with my academic advisor?", next: "schedule_advisor" },
+      { label: "What should I do if I need to cancel or reschedule my advising appointment?", next: "cancel_reschedule" },
+      { label: "Can I meet with any academic advisor?", next: "any_advisor" },
+      { label: "When are drop-ins?", next: "dropins" }
     ]
   },
-  academic_planning: {
-    id: "academic_planning",
-    type: "sub_option",
-    message: "The team is actively working to complete this flow. Please check back soon or contact academic planning services directly.",
-    options: [{ label: "Continue", next: "satisfaction" }]
-  },
-  add_drop: {
-    id: "add_drop",
+  advising_location: {
+    id: "advising_location",
     type: "response",
-    message: `For information on adding and dropping classes, visit: <a href=\"https://service.northeastern.edu/registration\" target=\"_blank\">Registration Service</a>.<br/>Important: Consult your academic advisor before making any schedule changes.`,
-    options: [{ label: "Continue", next: "satisfaction" }]
-  },
-  course_limit: {
-    id: "course_limit",
-    type: "response",
-    message: `During a fall or spring term, students are expected to take between 4-5 courses per semester with required labs/recitations (minimum 12 credit hours for full-time status).<br/>In the summer, students can enroll in 2 lecture courses plus any required labs/recitation in a term.<br/>For further questions, email or schedule an appointment with your academic advisor.`,
-    options: [{ label: "Continue", next: "satisfaction" }]
-  },
-  registration_timing: {
-    id: "registration_timing",
-    type: "response",
-    message: "The team is actively working to complete this specific response.",
-    options: [{ label: "Continue", next: "satisfaction" }]
-  },
-  hold: {
-    id: "hold",
-    type: "response",
-    message: "The team is actively working to complete this specific response.",
-    options: [{ label: "Continue", next: "satisfaction" }]
-  },
-  waitlist: {
-    id: "waitlist",
-    type: "response",
-    message: `Please direct any curriculum specific questions to your academic advisor.<br/>Waitlist information: <a href=\"https://service.northeastern.edu/registration\" target=\"_blank\">Registration Service</a>.<br/>Important: Joining a waitlist doesn't guarantee enrollment. Have backup courses ready to maintain full-time status.`,
-    options: [{ label: "Continue", next: "satisfaction" }]
-  },
-  advisor_help: {
-    id: "advisor_help",
-    type: "response",
-    message: `Students can schedule in-person or virtual appointments with their Academic Advisor through the StudentHub.<br/>Additionally, daily drop-in sessions are available Monday-Friday, 9:00am-4:00pm in room 147 of the Snell Engineering Center when the university is open.`,
-    options: [{ label: "Continue", next: "satisfaction" }]
-  },
-  advisor_schedule: {
-    id: "advisor_schedule",
-    type: "response",
-    message: "The team is actively working to complete this specific response.",
+    message: "The COE Academic Advising Office is located in 147 Snell Engineering Center.",
     options: [{ label: "Continue", next: "satisfaction" }]
   },
   find_advisor: {
     id: "find_advisor",
     type: "response",
-    message: "Students can find who their assigned Academic Advisor is in the Student Hub.",
+    message: "COE students are assigned a major-specific academic advisor to support them with academic-related questions. Students can find their academic advisor's contact information and appointment availability in the Student Hub.",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  schedule_advisor: {
+    id: "schedule_advisor",
+    type: "response",
+    message: "Use Navigate on the Student Hub to schedule appointments with your academic advisor. Schedules show availability for the next two weeks only.",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  cancel_reschedule: {
+    id: "cancel_reschedule",
+    type: "response",
+    message: "Cancel or reschedule your advising appointment through Navigate located on the Student Hub. Email your advisor directly if you are running late for an appointment.",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  any_advisor: {
+    id: "any_advisor",
+    type: "response",
+    message: "It is recommended that you meet with your assigned academic advisor; however you can choose to meet with other major-specific advisors if needed. View the complete advisor list at: https://coe.northeastern.edu/academics-experiential-learning/undergraduate-studies/undergraduate-academic-advising/",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  dropins: {
+    id: "dropins",
+    type: "response",
+    message: "Drop-ins are for quick questions with any available advisor. View the drop-in schedule on the COE Academic Advising Sharepoint site.",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  coe_tutoring: {
+    id: "coe_tutoring",
+    type: "response",
+    message: "Free peer tutoring is available in chemistry, physics, mathematics and select departmental courses. The current schedule can be found here: https://coetutoring.sites.northeastern.edu/",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  disability_access: {
+    id: "disability_access",
+    type: "response",
+    message: "Disability Access Services serves students who have documented disabilities as defined by the Americans with Disabilities Act as Amended. Services and registration processes can be found here: https://disabilityaccessservices.northeastern.edu/about/",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  fyelic: {
+    id: "fyelic",
+    type: "response",
+    message: "FYELIC is located on the 3rd floor of Snell Engineering Center and offers academic and Makerspace support to students enrolled in Cornerstone or GE1110/1111. More information can be found here: https://makerspaces.northeastern.edu/spaces/fyelic/",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  knack_writing: {
+    id: "knack_writing",
+    type: "response",
+    message: "Knack and the Writing Center offer additional academic support resources.",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  neurodiversity: {
+    id: "neurodiversity",
+    type: "response",
+    message: "Addresses and supports the challenges of the Neurodiverse population by offering valuable resources, tools, and events. More information can be found here: https://neurodiversityinitiative.sites.northeastern.edu/about/",
     options: [{ label: "Continue", next: "satisfaction" }]
   },
   satisfaction: {
