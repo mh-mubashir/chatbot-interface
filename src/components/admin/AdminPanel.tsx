@@ -28,10 +28,6 @@ export default function AdminPanel() {
   // Helper: get all nodes as array
   const nodeList = Object.values(flow);
 
-  // Helper: get children of a node
-  const getChildren = (nodeId: string) =>
-    nodeList.filter(n => n.options?.some(opt => opt.next === nodeId));
-
   // Helper: render tree recursively
   const renderTree = (nodeId: string, depth = 0, visited = new Set<string>()) => {
     if (visited.has(nodeId)) return null; // Prevent infinite recursion
