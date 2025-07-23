@@ -30,7 +30,8 @@ export const chatbotFlow: Record<string, FlowNode> = {
     message: "Please select a resource:",
     options: [
       { label: "Academic Advising and Support Resources", next: "advising_support" },
-      { label: "Course Registration", next: "course_registration" }
+      { label: "Course Registration", next: "course_registration" },
+      { label: "Degree Audit, Grades, and Transcripts", next: "degree_audit_grades_transcripts" }
     ]
   },
   // --- NEW TIER 1: COURSE REGISTRATION ---
@@ -317,5 +318,117 @@ export const chatbotFlow: Record<string, FlowNode> = {
     type: "end",
     message: "Thank you for using our service. Have a great day!",
     options: []
+  },
+  // --- NEW TIER 1: DEGREE AUDIT, GRADES, AND TRANSCRIPTS ---
+  degree_audit_grades_transcripts: {
+    id: "degree_audit_grades_transcripts",
+    type: "sub_option",
+    message: "What do you need help with?",
+    options: [
+      { label: "Degree Audit", next: "degree_audit" },
+      { label: "Grades", next: "grades" },
+      { label: "Transcripts", next: "transcripts" }
+    ]
+  },
+  // DEGREE AUDIT
+  degree_audit: {
+    id: "degree_audit",
+    type: "sub_option",
+    message: "Select your question:",
+    options: [
+      { label: "Where can I find my degree audit?", next: "find_degree_audit" },
+      { label: "How can I run a degree audit with a different major?", next: "run_degree_audit_different_major" },
+      { label: "How will I know which degree requirements are left?", next: "degree_requirements_left" }
+    ]
+  },
+  find_degree_audit: {
+    id: "find_degree_audit",
+    type: "response",
+    message: "Log into the Student Hub and take one of the following actions:<br>1. Click 'Services & Links' and scroll through the list to find 'My Degree Audit'<br>2. Type 'degree audit' into the search bar.",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  run_degree_audit_different_major: {
+    id: "run_degree_audit_different_major",
+    type: "response",
+    message: "You can run a degree audit to include your current program, or you can run one with a different program. View instructions here: https://registrar.northeastern.edu/wp-content/uploads/sites/9/How-to-Run-an-Audit.pdf",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  degree_requirements_left: {
+    id: "degree_requirements_left",
+    type: "response",
+    message: "Your degree audit will indicate incomplete requirements with a red X. Requirements with a green check box are complete. Requirements with blue ellipses are complete with in-progress courses. Contact your academic advisor for any degree audit questions.",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  // GRADES
+  grades: {
+    id: "grades",
+    type: "sub_option",
+    message: "Select your question:",
+    options: [
+      { label: "Where can I find my final grades for the term?", next: "find_final_grades" },
+      { label: "Where can I find my GPA?", next: "find_gpa" },
+      { label: "How can I calculate my GPA?", next: "calculate_gpa" },
+      { label: "What is the grade appeal process?", next: "grade_appeal_process" },
+      { label: "What happens if I failed a course?", next: "failed_course" },
+      { label: "What happens if I withdraw from a class?", next: "withdraw_class" }
+    ]
+  },
+  find_final_grades: {
+    id: "find_final_grades",
+    type: "response",
+    message: "Once final grades have been submitted, students can view their final grades by accessing the 'My grades' section in the Student Hub.",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  find_gpa: {
+    id: "find_gpa",
+    type: "response",
+    message: "Access your cumulative and term GPAs through your academic transcript in the Student Hub. Major and minor GPAs are displayed on your degree audit.",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  calculate_gpa: {
+    id: "calculate_gpa",
+    type: "response",
+    message: "GPA calculation instructions can be found here: https://service.northeastern.edu/registrar?id=kb_article_view&sysparm_article=KB000019928&sys_kb_id=b5d5e017877382143b170e96cebb3559&spa=1",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  grade_appeal_process: {
+    id: "grade_appeal_process",
+    type: "response",
+    message: "The grade appeal process varies by college. For COE courses, use the process found here: https://coe.northeastern.edu/academics-experiential-learning/undergraduate-studies/undergraduate-academic-advising/academic-standards-and-appeals/ For other colleges, check their advising websites for guidance.",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  failed_course: {
+    id: "failed_course",
+    type: "response",
+    message: "An F grade indicates failing a course, meaning you did not meet the minimum requirements to pass and will not receive credit. This grade will be calculated into your GPA and may impact your academic standing. If this was a required course for your program, you'll need to retake it. Contact your academic advisor to discuss retake options, timing, and any potential impact on your degree timeline.",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  withdraw_class: {
+    id: "withdraw_class",
+    type: "response",
+    message: "Before dropping a course, schedule a meeting with your academic advisor to review how this decision may affect your full-time enrollment status, financial aid eligibility, and graduation timeline. International students on F-1 visas must maintain compliance with enrollment requirements. For detailed withdrawal policies and deadlines, visit: https://catalog.northeastern.edu/undergraduate/academic-policies-procedures/registration-taking-courses/#text",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  // TRANSCRIPTS
+  transcripts: {
+    id: "transcripts",
+    type: "sub_option",
+    message: "Select your question:",
+    options: [
+      { label: "How can I request my official transcript?", next: "request_official_transcript" },
+      { label: "How can I review my unofficial transcript?", next: "review_unofficial_transcript" }
+    ]
+  },
+  request_official_transcript: {
+    id: "request_official_transcript",
+    type: "response",
+    message: "You can request an official transcript through Parchment. More information about transcripts and Parchment can be found here: https://service.northeastern.edu/registrar?id=kb_article_view&sysparm_article=KB000019947&sys_kb_id=ad4c9a7c9775de504b5736d11153af91&spa=1",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  review_unofficial_transcript: {
+    id: "review_unofficial_transcript",
+    type: "response",
+    message: "Current students can view and print unofficial transcripts on the Student Hub.",
+    options: [{ label: "Continue", next: "satisfaction" }]
   }
 }; 
