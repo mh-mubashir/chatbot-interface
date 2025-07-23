@@ -27,7 +27,7 @@ const ChatbotWidget: React.FC = () => {
       return () => clearTimeout(timer);
     }
     setTyping(false);
-  }, [currentNode.id, open]);
+  }, [currentNode.id, open, history.length]);
 
   // Auto-scroll to bottom when history or currentNode changes
   React.useEffect(() => {

@@ -7,12 +7,6 @@ interface ChatOption {
   next: string;
 }
 
-interface ChatNode {
-  id: string;
-  message: string;
-  options: ChatOption[];
-}
-
 interface ChatHistoryItem {
   nodeId: string;
   selectedOptionLabel?: string;
@@ -25,7 +19,7 @@ interface ChatbotState {
   reset: () => void;
 }
 
-export const useChatbotStore = create<ChatbotState>((set, get) => ({
+export const useChatbotStore = create<ChatbotState>((set/*, get*/) => ({
   currentNode: chatbotFlow.entry,
   history: [],
   goToNode: (nodeId, selectedOptionLabel) => {
