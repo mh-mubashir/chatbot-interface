@@ -1,11 +1,11 @@
 import { create } from 'zustand';
 import { chatbotFlow, FlowNode } from '../utils/flows';
 
-interface ChatOption {
-  id: string;
-  label: string;
-  next: string;
-}
+// interface ChatOption {
+//   id: string;
+//   label: string;
+//   next: string;
+// }
 
 interface ChatHistoryItem {
   nodeId: string;
