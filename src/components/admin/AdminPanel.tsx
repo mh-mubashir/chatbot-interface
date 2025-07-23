@@ -20,7 +20,7 @@ export default function AdminPanel() {
   const [flow, setFlow] = useState<Record<string, FlowNode>>(() => ({ ...initialFlow }));
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>('entry');
   const [editNode, setEditNode] = useState<FlowNode | null>(initialFlow['entry']);
-  const [newNode, setNewNode] = useState<Partial<FlowNode>>({ type: 'category' });
+  const [newNode, setNewNode] = useState<Partial<FlowNode> & { label?: string; next?: string }>({ type: 'category' });
   const [showAdd, setShowAdd] = useState(false);
   useEffect(() => setMounted(true), []);
   if (!mounted) return null;
