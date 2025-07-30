@@ -233,7 +233,7 @@ export default function Home() {
             </div>
             <p className="text-amber-800 text-center font-medium">
               The feedback system is only accessible to internal staff. 
-              Students won't be able to change ticket status.
+              Students won&apos;t be able to change ticket status.
             </p>
           </div>
           <div className="text-center">
@@ -254,7 +254,7 @@ export default function Home() {
       <footer className="bg-gray-50 border-t border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <p className="text-center text-gray-600 text-lg">
-            This project is a collaboration between the College of Engineering's 
+            This project is a collaboration between the College of Engineering&apos;s 
             advising offices and internal development teams.
           </p>
         </div>
