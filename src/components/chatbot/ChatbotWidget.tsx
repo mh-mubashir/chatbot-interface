@@ -2,7 +2,8 @@
 import React, { useState } from 'react';
 import { useChatbotStore } from '../../store/chatbotStore';
 import { chatbotFlow, NodeType } from '../../utils/flows';
-import { Bot, User } from 'lucide-react';
+import { User } from 'lucide-react';
+import Image from 'next/image';
 
 const typeColors: Record<NodeType, string> = {
   entry: 'bg-blue-100 text-blue-900',
@@ -46,7 +47,9 @@ const ChatbotWidget: React.FC = () => {
       // Bot message bubble
       bubbles.push(
         <div key={`bot-${i}`} className="flex items-start gap-2 mb-1">
-          <div className="flex-shrink-0"><Bot className="w-5 h-5 text-blue-500" /></div>
+          <div className="flex-shrink-0">
+            <Image src="/husky_logo.svg" alt="Husky Bot" width={20} height={20} className="w-5 h-5" />
+          </div>
           <div className={`rounded-2xl px-4 py-2 max-w-[75%] shadow ${typeColors[node.type]}`}
             dangerouslySetInnerHTML={{ __html: node.message }}
           />
@@ -72,11 +75,11 @@ const ChatbotWidget: React.FC = () => {
       {/* Floating Button */}
       {!open && (
         <button
-          className="bg-blue-600 text-white rounded-full shadow-lg p-4 hover:bg-blue-700 transition-all focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="bg-transparent rounded-full shadow-lg p-4 hover:shadow-xl transition-all focus:outline-none focus:ring-2 focus:ring-blue-400 overflow-hidden"
           onClick={() => setOpen(true)}
-          aria-label="Open Chatbot"
+          aria-label="Open Husky Bot"
         >
-          <Bot className="w-6 h-6" />
+          <Image src="/husky_logo.svg" alt="Husky Bot" width={48} height={48} className="w-12 h-12" />
         </button>
       )}
       {/* Chat Window */}
@@ -85,8 +88,8 @@ const ChatbotWidget: React.FC = () => {
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 border-b bg-blue-600/90">
             <div className="flex items-center gap-2">
-              <Bot className="w-6 h-6 text-white" />
-              <span className="font-bold text-white text-lg">Chatbot</span>
+              <Image src="/husky_logo.svg" alt="Husky Bot" width={24} height={24} className="w-6 h-6" />
+              <span className="font-bold text-white text-lg">Husky Bot</span>
             </div>
             <button
               className="text-white hover:text-blue-200 focus:outline-none"
@@ -101,7 +104,9 @@ const ChatbotWidget: React.FC = () => {
             {renderHistory()}
             {/* Current bot message bubble */}
             <div className="flex items-start gap-2 mb-1">
-              <div className="flex-shrink-0"><Bot className="w-5 h-5 text-blue-500" /></div>
+              <div className="flex-shrink-0">
+                <Image src="/husky_logo.svg" alt="Husky Bot" width={20} height={20} className="w-5 h-5" />
+              </div>
               <div className={`rounded-2xl px-4 py-2 max-w-[75%] shadow ${typeColors[currentNode.type]}`}
                 dangerouslySetInnerHTML={{ __html: currentNode.message }}
               />
@@ -109,7 +114,9 @@ const ChatbotWidget: React.FC = () => {
             {/* Typing indicator */}
             {typing && (
               <div className="flex items-start gap-2 mb-1">
-                <div className="flex-shrink-0"><Bot className="w-5 h-5 text-blue-500" /></div>
+                <div className="flex-shrink-0">
+                  <Image src="/husky_logo.svg" alt="Husky Bot" width={20} height={20} className="w-5 h-5" />
+                </div>
                 <div className="rounded-2xl px-4 py-2 max-w-[75%] bg-blue-100 text-blue-900 animate-pulse flex items-center gap-1">
                   <span className="inline-block w-2 h-2 bg-blue-400 rounded-full animate-bounce mr-1" style={{ animationDelay: '0s' }}></span>
                   <span className="inline-block w-2 h-2 bg-blue-400 rounded-full animate-bounce mr-1" style={{ animationDelay: '0.1s' }}></span>
