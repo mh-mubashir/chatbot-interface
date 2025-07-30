@@ -37,6 +37,29 @@ const ChatbotWidget: React.FC = () => {
     }
   }, [history, currentNode, open]);
 
+  // Helper to extract and format links from text
+  const formatMessageWithLinks = (message: string) => {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const parts = message.split(urlRegex);
+    
+    return parts.map((part, index) => {
+      if (urlRegex.test(part)) {
+        return (
+          <a
+            key={index}
+            href={part}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 hover:text-blue-800 underline break-all"
+          >
+            {part}
+          </a>
+        );
+      }
+      return part;
+    });
+  };
+
   // Helper to get the full conversation history as bubbles
   const renderHistory = () => {
     const bubbles = [];
@@ -46,26 +69,26 @@ const ChatbotWidget: React.FC = () => {
       if (!node) continue;
       // Bot message bubble
       bubbles.push(
-        <div key={`bot-${i}`} className="flex items-start gap-2 mb-1">
+        <div key={`bot-${i}`} className="flex items-start gap-2 mb-3">
           <div className="flex-shrink-0">
             <Image src="/husky_logo.svg" alt="Husky Bot" width={20} height={20} className="w-5 h-5" />
           </div>
-          <div className={`rounded-2xl px-4 py-2 max-w-[75%] shadow ${typeColors[node.type]}`}
-            dangerouslySetInnerHTML={{ __html: node.message }}
-          />
+          <div className={`rounded-2xl px-4 py-2 max-w-[75%] shadow ${typeColors[node.type]} break-words`}>
+            {formatMessageWithLinks(node.message)}
+          </div>
         </div>
       );
-              // User selection bubble (if any)
-        if (item.selectedOptionLabel) {
-          bubbles.push(
-            <div key={`user-${i}`} className="flex items-start gap-2 mb-1 justify-end">
-              <div className="rounded-2xl px-4 py-2 max-w-[75%] shadow bg-red-700 text-white flex items-center gap-1">
-                <User className="w-4 h-4 text-white opacity-70" />
-                <span>{item.selectedOptionLabel}</span>
-              </div>
+      // User selection bubble (if any)
+      if (item.selectedOptionLabel) {
+        bubbles.push(
+          <div key={`user-${i}`} className="flex items-start gap-2 mb-3 justify-end">
+            <div className="rounded-2xl px-4 py-2 max-w-[75%] shadow bg-red-700 text-white flex items-center gap-1">
+              <User className="w-4 h-4 text-white opacity-70" />
+              <span>{item.selectedOptionLabel}</span>
             </div>
-          );
-        }
+          </div>
+        );
+      }
     }
     return bubbles;
   };
@@ -100,20 +123,20 @@ const ChatbotWidget: React.FC = () => {
             </button>
           </div>
           {/* Chat History */}
-          <div className="flex-1 p-4 overflow-y-auto flex flex-col gap-1 bg-gradient-to-b from-white/80 to-red-50/60">
+          <div className="flex-1 p-4 overflow-y-auto flex flex-col gap-1 bg-gradient-to-b from-white/80 to-red-50/60 max-h-96">
             {renderHistory()}
             {/* Current bot message bubble */}
-            <div className="flex items-start gap-2 mb-1">
+            <div className="flex items-start gap-2 mb-3">
               <div className="flex-shrink-0">
                 <Image src="/husky_logo.svg" alt="Husky Bot" width={20} height={20} className="w-5 h-5" />
               </div>
-              <div className={`rounded-2xl px-4 py-2 max-w-[75%] shadow ${typeColors[currentNode.type]}`}
-                dangerouslySetInnerHTML={{ __html: currentNode.message }}
-              />
+              <div className={`rounded-2xl px-4 py-2 max-w-[75%] shadow ${typeColors[currentNode.type]} break-words`}>
+                {formatMessageWithLinks(currentNode.message)}
+              </div>
             </div>
             {/* Typing indicator */}
             {typing && (
-              <div className="flex items-start gap-2 mb-1">
+              <div className="flex items-start gap-2 mb-3">
                 <div className="flex-shrink-0">
                   <Image src="/husky_logo.svg" alt="Husky Bot" width={20} height={20} className="w-5 h-5" />
                 </div>
