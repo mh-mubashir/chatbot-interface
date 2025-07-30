@@ -7,6 +7,7 @@ const typeColors: Record<NodeType, string> = {
   category: 'bg-blue-200 text-blue-900 font-bold border border-blue-400',
   sub_option: 'bg-yellow-100 text-yellow-900 font-bold border border-yellow-300',
   response: 'bg-green-100 text-green-900 font-bold border border-green-300',
+  satisfaction: 'bg-purple-100 text-purple-900 font-bold border border-purple-300',
   end: 'bg-gray-700 text-white font-bold border border-gray-500',
 };
 
