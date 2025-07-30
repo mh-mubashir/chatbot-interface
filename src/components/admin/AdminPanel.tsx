@@ -19,7 +19,22 @@ type FlowType = 'undergraduate' | 'graduate';
 export default function AdminPanel() {
   const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState<FlowType>('undergraduate');
-  const [flow, setFlow] = useState<Record<string, FlowNode>>(() => ({ ...initialFlow }));
+  
+  // Load flow from localStorage or use initial flow
+  const [flow, setFlow] = useState<Record<string, FlowNode>>(() => {
+    if (typeof window !== 'undefined') {
+      const savedFlow = localStorage.getItem('chatbot-flow');
+      if (savedFlow) {
+        try {
+          return JSON.parse(savedFlow);
+        } catch (e) {
+          console.log('Failed to parse saved flow, using initial flow');
+        }
+      }
+    }
+    return { ...initialFlow };
+  });
+  
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>('entry');
   const [editNode, setEditNode] = useState<FlowNode | null>(initialFlow['entry']);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
@@ -52,16 +67,47 @@ export default function AdminPanel() {
   // Helper: get all nodes as array
   const nodeList = Object.values(flow);
 
-  // Helper: filter nodes by flow type (this is a simplified example - you'll need to implement proper filtering)
+  // Helper: filter nodes by flow type
   const getFlowNodes = (flowType: FlowType) => {
-    // For now, return all nodes. You'll need to implement proper filtering based on your flow structure
-    return nodeList.filter(node => {
-      if (flowType === 'undergraduate') {
-        return node.id.includes('ug_') || node.id === 'entry' || !node.id.includes('grad_');
-      } else {
-        return node.id.includes('grad_') || node.id === 'entry';
-      }
-    });
+    if (flowType === 'undergraduate') {
+      // For undergraduate, only show nodes that are part of undergrad_main flow
+      const undergradNodes = new Set(['undergrad_main']);
+      
+      // Add all nodes that can be reached from undergrad_main
+      const addReachableNodes = (nodeId: string) => {
+        const node = flow[nodeId];
+        if (node && node.options) {
+          node.options.forEach(option => {
+            if (option.next && option.next !== 'entry' && option.next !== 'satisfaction') {
+              undergradNodes.add(option.next);
+              addReachableNodes(option.next);
+            }
+          });
+        }
+      };
+      
+      addReachableNodes('undergrad_main');
+      return nodeList.filter(node => undergradNodes.has(node.id) && node.type !== 'satisfaction');
+    } else {
+      // For graduate, only show nodes that are part of grad_under_dev flow
+      const gradNodes = new Set(['grad_under_dev']);
+      
+      // Add all nodes that can be reached from grad_under_dev
+      const addReachableNodes = (nodeId: string) => {
+        const node = flow[nodeId];
+        if (node && node.options) {
+          node.options.forEach(option => {
+            if (option.next && option.next !== 'entry' && option.next !== 'satisfaction') {
+              gradNodes.add(option.next);
+              addReachableNodes(option.next);
+            }
+          });
+        }
+      };
+      
+      addReachableNodes('grad_under_dev');
+      return nodeList.filter(node => gradNodes.has(node.id) && node.type !== 'satisfaction');
+    }
   };
 
   // Helper: render tree recursively
@@ -95,6 +141,31 @@ export default function AdminPanel() {
     );
   };
 
+  // Helper: render the appropriate tree based on active tab
+  const renderFlowTree = () => {
+    // If there's a search term, filter nodes that match
+    if (searchTerm.trim()) {
+      const filteredNodes = getFlowNodes(activeTab).filter(node => 
+        node.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        node.message.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        node.type.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      
+      return (
+        <div>
+          {filteredNodes.map(node => renderTree(node.id))}
+        </div>
+      );
+    }
+    
+    // Otherwise show the full tree for the active tab
+    if (activeTab === 'undergraduate') {
+      return renderTree('undergrad_main');
+    } else {
+      return renderTree('grad_under_dev');
+    }
+  };
+
   // Save node edits
   const handleSave = () => {
     if (!editNode) {
@@ -121,6 +192,12 @@ export default function AdminPanel() {
     // Update the flow state
     setFlow(updatedFlow);
     
+    // Save to localStorage for persistence
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('chatbot-flow', JSON.stringify(updatedFlow));
+      console.log('Flow saved to localStorage');
+    }
+    
     // Force a re-render by updating the selected node
     setSelectedNodeId(editNode.id);
     
@@ -132,7 +209,7 @@ export default function AdminPanel() {
   // Add new node
   const handleAddNode = () => {
     if (!newNode.id || !newNode.type || !newNode.message) return;
-    setFlow({
+    const updatedFlow = {
       ...flow,
       [newNode.id]: {
         id: newNode.id,
@@ -140,7 +217,14 @@ export default function AdminPanel() {
         message: newNode.message,
         options: [],
       },
-    });
+    };
+    setFlow(updatedFlow);
+    
+    // Save to localStorage
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('chatbot-flow', JSON.stringify(updatedFlow));
+    }
+    
     setNewNode({ type: 'category' });
     setShowAdd(false);
   };
@@ -155,6 +239,12 @@ export default function AdminPanel() {
       newFlow[nid].options = newFlow[nid].options?.filter(opt => opt.next !== nodeId);
     });
     setFlow(newFlow);
+    
+    // Save to localStorage
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('chatbot-flow', JSON.stringify(newFlow));
+    }
+    
     setSelectedNodeId('entry');
     setEditNode({ ...newFlow['entry'] });
   };
@@ -167,7 +257,13 @@ export default function AdminPanel() {
       options: [...(editNode.options || []), { label, next }],
     };
     setEditNode(updated);
-    setFlow({ ...flow, [editNode.id]: updated });
+    const updatedFlow = { ...flow, [editNode.id]: updated };
+    setFlow(updatedFlow);
+    
+    // Save to localStorage
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('chatbot-flow', JSON.stringify(updatedFlow));
+    }
   };
 
   // Remove option from node
@@ -178,7 +274,66 @@ export default function AdminPanel() {
       options: (editNode.options || []).filter((_, i) => i !== idx),
     };
     setEditNode(updated);
-    setFlow({ ...flow, [editNode.id]: updated });
+    const updatedFlow = { ...flow, [editNode.id]: updated };
+    setFlow(updatedFlow);
+    
+    // Save to localStorage
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('chatbot-flow', JSON.stringify(updatedFlow));
+    }
+  };
+
+  // Reset flow to original
+  const handleResetFlow = () => {
+    if (!window.confirm('Reset flow to original? This will lose all changes.')) return;
+    setFlow({ ...initialFlow });
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('chatbot-flow');
+    }
+    setSelectedNodeId('entry');
+    setEditNode({ ...initialFlow['entry'] });
+    alert('Flow reset to original!');
+  };
+
+  // Export flow data
+  const handleExportFlow = () => {
+    const flowData = JSON.stringify(flow, null, 2);
+    const blob = new Blob([flowData], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'chatbot-flow.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  // Import flow data
+  const handleImportFlow = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          try {
+            const importedFlow = JSON.parse(e.target?.result as string);
+            setFlow(importedFlow);
+            if (typeof window !== 'undefined') {
+              localStorage.setItem('chatbot-flow', JSON.stringify(importedFlow));
+            }
+            alert('Flow imported successfully!');
+          } catch (error) {
+            alert('Failed to import flow: Invalid JSON');
+          }
+        };
+        reader.readAsText(file);
+      }
+    };
+    input.click();
   };
 
   return (
@@ -186,8 +341,42 @@ export default function AdminPanel() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Flow Management System</h1>
-          <p className="text-gray-600">Manage undergraduate and graduate advising flows separately</p>
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">Flow Management System</h1>
+              <p className="text-gray-600">Manage undergraduate and graduate advising flows separately</p>
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={handleExportFlow}
+                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                title="Export current flow data"
+              >
+                Export Flow
+              </button>
+              <button
+                onClick={handleImportFlow}
+                className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
+                title="Import flow data from file"
+              >
+                Import Flow
+              </button>
+              <button
+                onClick={handleResetFlow}
+                className="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition-colors"
+                title="Reset to original flow"
+              >
+                Reset Flow
+              </button>
+            </div>
+          </div>
+          
+          {/* Status indicator */}
+          <div className="text-sm text-gray-600">
+            {typeof window !== 'undefined' && localStorage.getItem('chatbot-flow') 
+              ? '🟢 Using saved flow data (changes persist across reloads)' 
+              : '🟡 Using original flow data (changes will be lost on reload)'}
+          </div>
         </div>
 
         {/* Tabs */}
@@ -247,7 +436,7 @@ export default function AdminPanel() {
 
               {/* Tree View */}
               <div className="overflow-y-auto max-h-[60vh] border rounded-lg p-4 bg-gray-50">
-                {renderTree('entry')}
+                {renderFlowTree()}
               </div>
 
               {/* Add Node Form */}
