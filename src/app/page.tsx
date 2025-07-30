@@ -26,7 +26,7 @@ export default function Home() {
         {/* Hero Section */}
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-gray-900 mb-6">
-            Engineering Advising Assistant
+            College of Engineering AI Advising Assistant
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
             Get quick answers to your academic advising questions, 24/7. 
