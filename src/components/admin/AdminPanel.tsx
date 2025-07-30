@@ -40,7 +40,7 @@ export default function AdminPanel() {
         const parsedFlow = JSON.parse(savedFlow);
         setFlow(parsedFlow);
         console.log('Loaded saved flow from localStorage');
-      } catch (e) {
+      } catch {
         console.log('Failed to parse saved flow, using initial flow');
       }
     }
@@ -328,7 +328,7 @@ export default function AdminPanel() {
               localStorage.setItem('chatbot-flow', JSON.stringify(importedFlow));
             }
             alert('Flow imported successfully!');
-          } catch (error) {
+          } catch {
             alert('Failed to import flow: Invalid JSON');
           }
         };
