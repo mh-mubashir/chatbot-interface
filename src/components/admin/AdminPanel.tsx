@@ -535,6 +535,7 @@ export default function AdminPanel() {
                            const newType = e.target.value as NodeType;
                            console.log('Changing type to:', newType);
                            setEditNode(prev => {
+                             if (!prev) return null;
                              const updated = { ...prev, type: newType };
                              console.log('Updated editNode:', updated);
                              setHasUnsavedChanges(true);
@@ -560,6 +561,7 @@ export default function AdminPanel() {
                          const newMessage = e.target.value;
                          console.log('Changing message to:', newMessage);
                          setEditNode(prev => {
+                           if (!prev) return null;
                            const updated = { ...prev, message: newMessage };
                            console.log('Updated editNode:', updated);
                            setHasUnsavedChanges(true);
@@ -605,6 +607,7 @@ export default function AdminPanel() {
                              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-gray-900"
                              value={opt.label}
                             onChange={e => {
+                              if (!editNode) return;
                               const updated = { ...editNode };
                               if (!updated.options) return;
                               updated.options[idx].label = e.target.value;
@@ -617,6 +620,7 @@ export default function AdminPanel() {
                              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-gray-900"
                              value={opt.next}
                             onChange={e => {
+                              if (!editNode) return;
                               const updated = { ...editNode };
                               if (!updated.options) return;
                               updated.options[idx].next = e.target.value;
