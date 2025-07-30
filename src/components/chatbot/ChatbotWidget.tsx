@@ -6,9 +6,9 @@ import { User } from 'lucide-react';
 import Image from 'next/image';
 
 const typeColors: Record<NodeType, string> = {
-  entry: 'bg-blue-100 text-blue-900',
-  category: 'bg-blue-200 text-blue-900',
-  sub_option: 'bg-yellow-100 text-yellow-900',
+  entry: 'bg-red-100 text-red-900',
+  category: 'bg-red-200 text-red-900',
+  sub_option: 'bg-amber-100 text-amber-900',
   response: 'bg-green-100 text-green-900',
   satisfaction: 'bg-purple-200 text-purple-900',
   end: 'bg-gray-700 text-white',
@@ -55,17 +55,17 @@ const ChatbotWidget: React.FC = () => {
           />
         </div>
       );
-      // User selection bubble (if any)
-      if (item.selectedOptionLabel) {
-        bubbles.push(
-          <div key={`user-${i}`} className="flex items-start gap-2 mb-1 justify-end">
-            <div className="rounded-2xl px-4 py-2 max-w-[75%] shadow bg-blue-600 text-white flex items-center gap-1">
-              <User className="w-4 h-4 text-white opacity-70" />
-              <span>{item.selectedOptionLabel}</span>
+              // User selection bubble (if any)
+        if (item.selectedOptionLabel) {
+          bubbles.push(
+            <div key={`user-${i}`} className="flex items-start gap-2 mb-1 justify-end">
+              <div className="rounded-2xl px-4 py-2 max-w-[75%] shadow bg-red-700 text-white flex items-center gap-1">
+                <User className="w-4 h-4 text-white opacity-70" />
+                <span>{item.selectedOptionLabel}</span>
+              </div>
             </div>
-          </div>
-        );
-      }
+          );
+        }
     }
     return bubbles;
   };
@@ -84,9 +84,9 @@ const ChatbotWidget: React.FC = () => {
       )}
       {/* Chat Window */}
       {open && (
-        <div className="w-80 max-w-[95vw] bg-white/90 backdrop-blur-md rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-fade-in border border-blue-200">
+        <div className="w-80 max-w-[95vw] bg-white/90 backdrop-blur-md rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-fade-in border border-red-200">
           {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3 border-b bg-blue-600/90">
+          <div className="flex items-center justify-between px-4 py-3 border-b bg-red-700/90">
             <div className="flex items-center gap-2">
               <Image src="/husky_logo.svg" alt="Husky Bot" width={24} height={24} className="w-6 h-6" />
               <span className="font-bold text-white text-lg">Husky Bot</span>
@@ -100,7 +100,7 @@ const ChatbotWidget: React.FC = () => {
             </button>
           </div>
           {/* Chat History */}
-          <div className="flex-1 p-4 overflow-y-auto flex flex-col gap-1 bg-gradient-to-b from-white/80 to-blue-50/60">
+          <div className="flex-1 p-4 overflow-y-auto flex flex-col gap-1 bg-gradient-to-b from-white/80 to-red-50/60">
             {renderHistory()}
             {/* Current bot message bubble */}
             <div className="flex items-start gap-2 mb-1">
@@ -117,10 +117,10 @@ const ChatbotWidget: React.FC = () => {
                 <div className="flex-shrink-0">
                   <Image src="/husky_logo.svg" alt="Husky Bot" width={20} height={20} className="w-5 h-5" />
                 </div>
-                <div className="rounded-2xl px-4 py-2 max-w-[75%] bg-blue-100 text-blue-900 animate-pulse flex items-center gap-1">
-                  <span className="inline-block w-2 h-2 bg-blue-400 rounded-full animate-bounce mr-1" style={{ animationDelay: '0s' }}></span>
-                  <span className="inline-block w-2 h-2 bg-blue-400 rounded-full animate-bounce mr-1" style={{ animationDelay: '0.1s' }}></span>
-                  <span className="inline-block w-2 h-2 bg-blue-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></span>
+                <div className="rounded-2xl px-4 py-2 max-w-[75%] bg-red-100 text-red-900 animate-pulse flex items-center gap-1">
+                  <span className="inline-block w-2 h-2 bg-red-400 rounded-full animate-bounce mr-1" style={{ animationDelay: '0s' }}></span>
+                  <span className="inline-block w-2 h-2 bg-red-400 rounded-full animate-bounce mr-1" style={{ animationDelay: '0.1s' }}></span>
+                  <span className="inline-block w-2 h-2 bg-red-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></span>
                 </div>
               </div>
             )}
@@ -133,7 +133,7 @@ const ChatbotWidget: React.FC = () => {
                 {currentNode.options.map((opt) => (
                   <button
                     key={opt.label}
-                    className="rounded-full px-4 py-2 bg-blue-600 text-white font-semibold shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all"
+                    className="rounded-full px-4 py-2 bg-red-700 text-white font-semibold shadow hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-red-400 transition-all"
                     onClick={() => goToNode(opt.next, opt.label)}
                   >
                     {opt.label}
