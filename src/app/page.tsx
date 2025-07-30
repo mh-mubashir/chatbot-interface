@@ -26,7 +26,7 @@ export default function Home() {
         {/* Hero Section */}
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-gray-900 mb-6">
-            College of Engineering AI Advising Assistant
+            COE AI Advising Assistant
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
             Get quick answers to your academic advising questions, 24/7. 
@@ -105,10 +105,75 @@ export default function Home() {
             <span className="text-red-600 mr-2">●</span>
             Who Developed It
           </h3>
-          <p className="text-gray-600">
+          <p className="text-gray-600 mb-6">
             This chatbot is an internal pilot project developed by the College of Engineering, 
             with input and representation from both Graduate and Undergraduate Advising Offices.
           </p>
+          
+          {/* Development Team */}
+          <div className="mt-6 pt-6 border-t border-red-100">
+            <h4 className="text-lg font-semibold text-gray-900 mb-6 flex items-center justify-center">
+              <span className="text-red-500 mr-2">🎉</span>
+              <span className="text-red-600">Development Team</span>
+              <span className="text-red-500 ml-2">🎉</span>
+            </h4>
+            <div className="text-center mb-6">
+              <p className="text-gray-600 italic">Special thanks to our amazing team members who made this project possible</p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="relative group">
+                <div className="absolute -inset-1 bg-gradient-to-r from-red-400 to-red-600 rounded-lg blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
+                <div className="relative bg-white rounded-lg p-4 border border-red-200 shadow-lg hover:shadow-xl transition-all duration-300">
+                  <div className="text-center">
+                    <div className="text-2xl mb-2">🌟</div>
+                    <h5 className="text-lg font-semibold text-gray-900 mb-1">Polina Starobinets</h5>
+                    <p className="text-sm text-red-600 font-medium">Project Lead</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="relative group">
+                <div className="absolute -inset-1 bg-gradient-to-r from-red-400 to-red-600 rounded-lg blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
+                <div className="relative bg-white rounded-lg p-4 border border-red-200 shadow-lg hover:shadow-xl transition-all duration-300">
+                  <div className="text-center">
+                    <div className="text-2xl mb-2">✨</div>
+                    <h5 className="text-lg font-semibold text-gray-900 mb-1">Lindsay Werner</h5>
+                    <p className="text-sm text-red-600 font-medium">Graduate Advising Office Lead</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="relative group">
+                <div className="absolute -inset-1 bg-gradient-to-r from-red-400 to-red-600 rounded-lg blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
+                <div className="relative bg-white rounded-lg p-4 border border-red-200 shadow-lg hover:shadow-xl transition-all duration-300">
+                  <div className="text-center">
+                    <div className="text-2xl mb-2">💫</div>
+                    <h5 className="text-lg font-semibold text-gray-900 mb-1">Krystal Ristaino</h5>
+                    <p className="text-sm text-red-600 font-medium">Undergraduate Advising Office Lead</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="relative group">
+                <div className="absolute -inset-1 bg-gradient-to-r from-red-400 to-red-600 rounded-lg blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
+                <div className="relative bg-white rounded-lg p-4 border border-red-200 shadow-lg hover:shadow-xl transition-all duration-300">
+                  <div className="text-center">
+                    <div className="text-2xl mb-2">🚀</div>
+                    <h5 className="text-lg font-semibold text-gray-900 mb-1">Gunar Shirner</h5>
+                    <p className="text-sm text-red-600 font-medium">Technical Lead</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="text-center mt-6">
+              <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-red-50 to-red-100 px-6 py-3 rounded-full border border-red-200">
+                <span className="text-red-600">🎊</span>
+                <span className="text-gray-700 font-medium">Thank you for your help and support!</span>
+                <span className="text-red-600">🎊</span>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Where to Access It */}
