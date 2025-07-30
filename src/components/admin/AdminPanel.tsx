@@ -7,26 +7,62 @@ const typeColors: Record<NodeType, string> = {
   category: 'bg-blue-200 text-blue-900 font-bold border border-blue-400',
   sub_option: 'bg-yellow-100 text-yellow-900 font-bold border border-yellow-300',
   response: 'bg-green-100 text-green-900 font-bold border border-green-300',
-  satisfaction: 'bg-purple-200 text-purple-900 font-bold border border-purple-300',
   end: 'bg-gray-700 text-white font-bold border border-gray-500',
 };
 
 const nodeTypes: NodeType[] = [
-  'entry', 'category', 'sub_option', 'response', 'satisfaction', 'end'
+  'entry', 'category', 'sub_option', 'response', 'end'
 ];
+
+type FlowType = 'undergraduate' | 'graduate';
 
 export default function AdminPanel() {
   const [mounted, setMounted] = useState(false);
+  const [activeTab, setActiveTab] = useState<FlowType>('undergraduate');
   const [flow, setFlow] = useState<Record<string, FlowNode>>(() => ({ ...initialFlow }));
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>('entry');
   const [editNode, setEditNode] = useState<FlowNode | null>(initialFlow['entry']);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [newNode, setNewNode] = useState<Partial<FlowNode> & { label?: string; next?: string }>({ type: 'category' });
   const [showAdd, setShowAdd] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+
   useEffect(() => setMounted(true), []);
+
+  // Update editNode when selectedNodeId changes
+  useEffect(() => {
+    if (selectedNodeId && flow[selectedNodeId]) {
+      const nodeData = { ...flow[selectedNodeId] };
+      console.log('Updating editNode for:', selectedNodeId, nodeData); // Debug log
+      setEditNode(nodeData);
+    } else {
+      console.log('No node found for ID:', selectedNodeId, 'Available nodes:', Object.keys(flow));
+    }
+  }, [selectedNodeId, flow]);
+
+  // Debug: Log the current flow state
+  useEffect(() => {
+    console.log('Current flow:', flow);
+    console.log('Selected node ID:', selectedNodeId);
+    console.log('Edit node:', editNode);
+  }, [flow, selectedNodeId, editNode]);
+
   if (!mounted) return null;
 
   // Helper: get all nodes as array
   const nodeList = Object.values(flow);
+
+  // Helper: filter nodes by flow type (this is a simplified example - you'll need to implement proper filtering)
+  const getFlowNodes = (flowType: FlowType) => {
+    // For now, return all nodes. You'll need to implement proper filtering based on your flow structure
+    return nodeList.filter(node => {
+      if (flowType === 'undergraduate') {
+        return node.id.includes('ug_') || node.id === 'entry' || !node.id.includes('grad_');
+      } else {
+        return node.id.includes('grad_') || node.id === 'entry';
+      }
+    });
+  };
 
   // Helper: render tree recursively
   const renderTree = (nodeId: string, depth = 0, visited = new Set<string>()) => {
@@ -34,18 +70,25 @@ export default function AdminPanel() {
     visited.add(nodeId);
     const node = flow[nodeId];
     if (!node) return null;
+
+    // Skip satisfaction nodes in the editor
+    if (node.type === 'satisfaction') return null;
+
     return (
       <div key={nodeId} style={{ marginLeft: depth * 16 }}>
         <div
-          className={`p-2 mb-1 rounded cursor-pointer flex items-center gap-2 ${typeColors[node.type]} ${selectedNodeId === nodeId ? 'ring-2 ring-blue-400' : ''}`}
+          className={`p-3 mb-2 rounded-lg cursor-pointer flex items-center gap-2 transition-all hover:shadow-md ${typeColors[node.type]} ${selectedNodeId === nodeId ? 'ring-2 ring-blue-400 shadow-lg' : ''}`}
           onClick={() => {
+            console.log('Clicked node:', nodeId, node); // Debug log
             setSelectedNodeId(nodeId);
+            // Immediately set the edit node to ensure it loads
             setEditNode({ ...node });
+            console.log('Set editNode to:', { ...node });
           }}
         >
-          <span className="font-mono text-xs">{node.id}</span>
-          <span className="text-xs px-2 py-0.5 rounded border border-gray-200" style={{ background: 'rgba(0,0,0,0.03)' }}>{node.type}</span>
-          <span className="truncate text-sm">{node.message.slice(0, 40)}{node.message.length > 40 ? '...' : ''}</span>
+          <span className="font-mono text-xs bg-white/50 px-2 py-1 rounded">{node.id}</span>
+          <span className="text-xs px-2 py-1 rounded border border-gray-200 bg-white/50">{node.type}</span>
+          <span className="truncate text-sm flex-1">{node.message.slice(0, 50)}{node.message.length > 50 ? '...' : ''}</span>
         </div>
         {node.options && node.options.map(opt => renderTree(opt.next, depth + 1, new Set(visited)))}
       </div>
@@ -54,8 +97,36 @@ export default function AdminPanel() {
 
   // Save node edits
   const handleSave = () => {
-    if (!editNode) return;
-    setFlow({ ...flow, [editNode.id]: { ...editNode } });
+    if (!editNode) {
+      console.log('No editNode to save');
+      return;
+    }
+    
+    console.log('Saving node:', editNode);
+    console.log('Current flow before save:', flow);
+    
+    // Create a new flow object with the updated node
+    const updatedFlow = {
+      ...flow,
+      [editNode.id]: {
+        id: editNode.id,
+        type: editNode.type,
+        message: editNode.message,
+        options: editNode.options || []
+      }
+    };
+    
+    console.log('Updated flow after save:', updatedFlow);
+    
+    // Update the flow state
+    setFlow(updatedFlow);
+    
+    // Force a re-render by updating the selected node
+    setSelectedNodeId(editNode.id);
+    
+    // Show success message
+    setHasUnsavedChanges(false);
+    alert(`Node "${editNode.id}" saved successfully!`);
   };
 
   // Add new node
@@ -111,168 +182,313 @@ export default function AdminPanel() {
   };
 
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold mb-4">Admin Flow Management</h1>
-      <div className="flex gap-8">
-        {/* Flow Tree */}
-        <div className="w-1/3 overflow-y-auto max-h-[80vh] border-r pr-4">
-          <h2 className="font-semibold mb-2">Flow Tree</h2>
-          {renderTree('entry')}
-          <button
-            className="mt-4 bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 w-full"
-            onClick={() => setShowAdd(true)}
-          >
-            + Add Node
-          </button>
-          {showAdd && (
-            <div className="mt-2 p-2 border rounded bg-gray-50">
-              <input
-                className="border rounded px-2 py-1 w-full mb-1"
-                placeholder="Node ID"
-                value={newNode.id || ''}
-                onChange={e => setNewNode({ ...newNode, id: e.target.value })}
-              />
-              <select
-                className="border rounded px-2 py-1 w-full mb-1"
-                value={newNode.type}
-                onChange={e => setNewNode({ ...newNode, type: e.target.value as NodeType })}
-              >
-                {nodeTypes.map(type => (
-                  <option key={type} value={type}>{type}</option>
-                ))}
-              </select>
-              <textarea
-                className="border rounded px-2 py-1 w-full mb-1"
-                placeholder="Node Message"
-                value={newNode.message || ''}
-                onChange={e => setNewNode({ ...newNode, message: e.target.value })}
-              />
-              <button
-                className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 w-full mb-1"
-                onClick={handleAddNode}
-              >
-                Add Node
-              </button>
-              <button
-                className="bg-gray-300 text-gray-700 px-3 py-1 rounded w-full"
-                onClick={() => setShowAdd(false)}
-              >
-                Cancel
-              </button>
-            </div>
-          )}
+    <div className="min-h-screen bg-gray-50 p-6">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Flow Management System</h1>
+          <p className="text-gray-600">Manage undergraduate and graduate advising flows separately</p>
         </div>
-        {/* Node Editor */}
-        <div className="flex-1">
-          {editNode && (
-            <div>
-              <h2 className="font-semibold mb-2">Edit Node</h2>
-              <div className="flex gap-2 mb-2">
-                <input
-                  className="border rounded px-2 py-1 flex-1"
-                  value={editNode.id}
-                  disabled
-                />
-                <select
-                  className="border rounded px-2 py-1"
-                  value={editNode.type}
-                  onChange={e => setEditNode({ ...editNode, type: e.target.value as NodeType })}
-                >
-                  {nodeTypes.map(type => (
-                    <option key={type} value={type}>{type}</option>
-                  ))}
-                </select>
+
+        {/* Tabs */}
+        <div className="bg-white rounded-lg shadow-sm mb-6">
+          <div className="border-b border-gray-200">
+            <nav className="flex space-x-8 px-6">
+              <button
+                onClick={() => setActiveTab('undergraduate')}
+                className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                  activeTab === 'undergraduate'
+                    ? 'border-red-500 text-red-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                Undergraduate Flow
+              </button>
+              <button
+                onClick={() => setActiveTab('graduate')}
+                className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                  activeTab === 'graduate'
+                    ? 'border-red-500 text-red-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                Graduate Flow
+              </button>
+            </nav>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Flow Tree Panel */}
+          <div className="lg:col-span-1">
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-semibold text-gray-900">
+                  {activeTab === 'undergraduate' ? 'Undergraduate' : 'Graduate'} Flow Tree
+                </h2>
                 <button
-                  className="text-red-500 hover:text-red-700 px-2"
-                  onClick={() => handleDeleteNode(editNode.id)}
-                  disabled={editNode.id === 'entry'}
+                  className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
+                  onClick={() => setShowAdd(true)}
                 >
-                  Delete
+                  + Add Node
                 </button>
               </div>
-              <textarea
-                className="w-full border rounded p-2 mb-2"
-                rows={3}
-                value={editNode.message}
-                onChange={e => setEditNode({ ...editNode, message: e.target.value })}
-              />
-              <button
-                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 mb-4"
-                onClick={handleSave}
-              >
-                Save
-              </button>
-              {/* Options List */}
-              <h3 className="font-semibold mb-1 mt-4">Options</h3>
-              <ul className="mb-2">
-                {(editNode.options || []).map((opt, idx) => (
-                  <li key={idx} className="flex items-center gap-2 mb-1">
-                    <input
-                      className="border rounded px-1 py-0.5 text-sm"
-                      value={opt.label}
-                      onChange={e => {
-                        const updated = { ...editNode };
-                        if (!updated.options) return;
-                        updated.options[idx].label = e.target.value;
-                        setEditNode(updated);
-                        setFlow({ ...flow, [editNode.id]: updated });
-                      }}
-                    />
-                    <select
-                      className="border rounded px-1 py-0.5 text-sm"
-                      value={opt.next}
-                      onChange={e => {
-                        const updated = { ...editNode };
-                        if (!updated.options) return;
-                        updated.options[idx].next = e.target.value;
-                        setEditNode(updated);
-                        setFlow({ ...flow, [editNode.id]: updated });
-                      }}
-                    >
-                      {nodeList.map(n => (
-                        <option key={n.id} value={n.id}>{n.id}</option>
+
+              {/* Search */}
+              <div className="mb-4">
+                                 <input
+                   type="text"
+                   placeholder="Search nodes..."
+                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-gray-900"
+                   value={searchTerm}
+                   onChange={(e) => setSearchTerm(e.target.value)}
+                 />
+              </div>
+
+              {/* Tree View */}
+              <div className="overflow-y-auto max-h-[60vh] border rounded-lg p-4 bg-gray-50">
+                {renderTree('entry')}
+              </div>
+
+              {/* Add Node Form */}
+              {showAdd && (
+                <div className="mt-4 p-4 border border-gray-200 rounded-lg bg-gray-50">
+                  <h3 className="font-semibold mb-3">Add New Node</h3>
+                  <div className="space-y-3">
+                                         <input
+                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-gray-900"
+                       placeholder="Node ID"
+                       value={newNode.id || ''}
+                       onChange={e => setNewNode({ ...newNode, id: e.target.value })}
+                     />
+                                         <select
+                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-gray-900"
+                       value={newNode.type}
+                       onChange={e => setNewNode({ ...newNode, type: e.target.value as NodeType })}
+                     >
+                      {nodeTypes.map(type => (
+                        <option key={type} value={type}>{type}</option>
                       ))}
                     </select>
-                    <button
-                      className="text-red-500 hover:underline text-xs"
-                      onClick={() => handleRemoveOption(idx)}
-                    >
-                      Delete
-                    </button>
-                  </li>
-                ))}
-              </ul>
-              {/* Add Option */}
-              <div className="flex gap-2 mb-2">
-                <input
-                  className="border rounded px-2 py-1 text-sm flex-1"
-                  placeholder="Option Label"
-                  value={newNode.label || ''}
-                  onChange={e => setNewNode({ ...newNode, label: e.target.value })}
-                />
-                <select
-                  className="border rounded px-2 py-1 text-sm flex-1"
-                  value={newNode.next || ''}
-                  onChange={e => setNewNode({ ...newNode, next: e.target.value })}
-                >
-                  <option value="">Select target node</option>
-                  {nodeList.map(n => (
-                    <option key={n.id} value={n.id}>{n.id}</option>
-                  ))}
-                </select>
-                <button
-                  className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
-                  onClick={() => {
-                    if (!newNode.label || !newNode.next) return;
-                    handleAddOption(newNode.label, newNode.next);
-                    setNewNode({ type: 'category' });
-                  }}
-                >
-                  Add
-                </button>
-              </div>
+                                         <textarea
+                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-gray-900"
+                       placeholder="Node Message"
+                       rows={3}
+                       value={newNode.message || ''}
+                       onChange={e => setNewNode({ ...newNode, message: e.target.value })}
+                     />
+                    <div className="flex gap-2">
+                      <button
+                        className="flex-1 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
+                        onClick={handleAddNode}
+                      >
+                        Add Node
+                      </button>
+                      <button
+                        className="flex-1 bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition-colors"
+                        onClick={() => setShowAdd(false)}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
-          )}
+          </div>
+
+          {/* Node Editor Panel */}
+          <div className="lg:col-span-2">
+            <div className="bg-white rounded-lg shadow-sm p-6">
+                             {editNode ? (
+                 <div key={editNode.id}>
+                   <div className="flex items-center justify-between mb-6">
+                     <h2 className="text-xl font-semibold text-gray-900">
+                       Edit Node: {editNode.id}
+                       <span className="text-sm text-gray-500 ml-2">({editNode.type})</span>
+                     </h2>
+                     <button
+                       className="text-red-500 hover:text-red-700 px-3 py-1 rounded hover:bg-red-50 transition-colors"
+                       onClick={() => handleDeleteNode(editNode.id)}
+                       disabled={editNode.id === 'entry'}
+                     >
+                       Delete Node
+                     </button>
+                   </div>
+
+                                     {/* Debug Info */}
+                   <div className="mb-4 p-3 bg-gray-100 rounded-lg text-sm">
+                     <p><strong>Selected Node ID:</strong> {selectedNodeId}</p>
+                     <p><strong>Edit Node ID:</strong> {editNode?.id}</p>
+                     <p><strong>Edit Node Type:</strong> {editNode?.type}</p>
+                     <p><strong>Edit Node Message:</strong> {editNode?.message?.substring(0, 50)}...</p>
+                   </div>
+
+                                      {/* Node Details */}
+                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                     <div>
+                       <label className="block text-sm font-medium text-gray-700 mb-2">Node ID</label>
+                       <input
+                         className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-900"
+                         value={editNode?.id || ''}
+                         disabled
+                       />
+                     </div>
+                     <div>
+                       <label className="block text-sm font-medium text-gray-700 mb-2">Node Type</label>
+                                                <select
+                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-gray-900"
+                           value={editNode?.type || 'category'}
+                         onChange={e => {
+                           const newType = e.target.value as NodeType;
+                           console.log('Changing type to:', newType);
+                           setEditNode(prev => {
+                             const updated = { ...prev, type: newType };
+                             console.log('Updated editNode:', updated);
+                             setHasUnsavedChanges(true);
+                             return updated;
+                           });
+                         }}
+                       >
+                         {nodeTypes.map(type => (
+                           <option key={type} value={type}>{type}</option>
+                         ))}
+                       </select>
+                     </div>
+                   </div>
+
+                   {/* Message */}
+                   <div className="mb-6">
+                     <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
+                     <textarea
+                       className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-gray-900"
+                       rows={4}
+                       value={editNode?.message || ''}
+                       onChange={e => {
+                         const newMessage = e.target.value;
+                         console.log('Changing message to:', newMessage);
+                         setEditNode(prev => {
+                           const updated = { ...prev, message: newMessage };
+                           console.log('Updated editNode:', updated);
+                           setHasUnsavedChanges(true);
+                           return updated;
+                         });
+                       }}
+                       placeholder="Enter the message that will be displayed to users..."
+                     />
+                   </div>
+
+                                     <div className="flex gap-3 mb-6">
+                     <button
+                       className={`px-6 py-2 rounded-lg transition-colors ${
+                         hasUnsavedChanges 
+                           ? 'bg-orange-600 hover:bg-orange-700 text-white' 
+                           : 'bg-red-600 hover:bg-red-700 text-white'
+                       }`}
+                       onClick={handleSave}
+                     >
+                       {hasUnsavedChanges ? 'Save Changes*' : 'Save Changes'}
+                     </button>
+                     <button
+                       className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                       onClick={() => {
+                         console.log('Current editNode state:', editNode);
+                         console.log('Current flow state:', flow);
+                         alert(`Debug Info:\nEditNode: ${JSON.stringify(editNode, null, 2)}\n\nFlow: ${Object.keys(flow).length} nodes`);
+                       }}
+                     >
+                       Debug
+                     </button>
+                   </div>
+
+                  {/* Options */}
+                  <div className="border-t pt-6">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Options</h3>
+                    
+                                         {/* Existing Options */}
+                     <div className="space-y-3 mb-4">
+                       {(editNode?.options || []).map((opt, idx) => (
+                        <div key={idx} className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg">
+                                                     <input
+                             className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-gray-900"
+                             value={opt.label}
+                            onChange={e => {
+                              const updated = { ...editNode };
+                              if (!updated.options) return;
+                              updated.options[idx].label = e.target.value;
+                              setEditNode(updated);
+                              setFlow({ ...flow, [editNode.id]: updated });
+                            }}
+                            placeholder="Option label"
+                          />
+                                                     <select
+                             className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-gray-900"
+                             value={opt.next}
+                            onChange={e => {
+                              const updated = { ...editNode };
+                              if (!updated.options) return;
+                              updated.options[idx].next = e.target.value;
+                              setEditNode(updated);
+                              setFlow({ ...flow, [editNode.id]: updated });
+                            }}
+                          >
+                            {nodeList.map(n => (
+                              <option key={n.id} value={n.id}>{n.id}</option>
+                            ))}
+                          </select>
+                          <button
+                            className="text-red-500 hover:text-red-700 px-2 py-1 rounded hover:bg-red-50 transition-colors"
+                            onClick={() => handleRemoveOption(idx)}
+                          >
+                            ✕
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Add New Option */}
+                    <div className="border-t pt-4">
+                      <h4 className="font-medium text-gray-900 mb-3">Add New Option</h4>
+                      <div className="flex gap-3">
+                                                 <input
+                           className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-gray-900"
+                           placeholder="Option Label"
+                           value={newNode.label || ''}
+                          onChange={e => setNewNode({ ...newNode, label: e.target.value })}
+                        />
+                                                 <select
+                           className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 text-gray-900"
+                           value={newNode.next || ''}
+                          onChange={e => setNewNode({ ...newNode, next: e.target.value })}
+                        >
+                          <option value="">Select target node</option>
+                          {nodeList.map(n => (
+                            <option key={n.id} value={n.id}>{n.id}</option>
+                          ))}
+                        </select>
+                        <button
+                          className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
+                          onClick={() => {
+                            if (!newNode.label || !newNode.next) return;
+                            handleAddOption(newNode.label, newNode.next);
+                            setNewNode({ type: 'category' });
+                          }}
+                        >
+                          Add
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center py-12">
+                  <div className="text-gray-400 text-6xl mb-4">📝</div>
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">No Node Selected</h3>
+                  <p className="text-gray-500">Select a node from the flow tree to edit its properties</p>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>
