@@ -20,20 +20,8 @@ export default function AdminPanel() {
   const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState<FlowType>('undergraduate');
   
-  // Load flow from localStorage or use initial flow
-  const [flow, setFlow] = useState<Record<string, FlowNode>>(() => {
-    if (typeof window !== 'undefined') {
-      const savedFlow = localStorage.getItem('chatbot-flow');
-      if (savedFlow) {
-        try {
-          return JSON.parse(savedFlow);
-        } catch (e) {
-          console.log('Failed to parse saved flow, using initial flow');
-        }
-      }
-    }
-    return { ...initialFlow };
-  });
+  // Initialize with initial flow, then load from localStorage in useEffect
+  const [flow, setFlow] = useState<Record<string, FlowNode>>({ ...initialFlow });
   
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>('entry');
   const [editNode, setEditNode] = useState<FlowNode | null>(initialFlow['entry']);
@@ -43,6 +31,20 @@ export default function AdminPanel() {
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => setMounted(true), []);
+
+  // Load flow from localStorage after component mounts
+  useEffect(() => {
+    const savedFlow = localStorage.getItem('chatbot-flow');
+    if (savedFlow) {
+      try {
+        const parsedFlow = JSON.parse(savedFlow);
+        setFlow(parsedFlow);
+        console.log('Loaded saved flow from localStorage');
+      } catch (e) {
+        console.log('Failed to parse saved flow, using initial flow');
+      }
+    }
+  }, []);
 
   // Update editNode when selectedNodeId changes
   useEffect(() => {
@@ -193,7 +195,7 @@ export default function AdminPanel() {
     setFlow(updatedFlow);
     
     // Save to localStorage for persistence
-    if (typeof window !== 'undefined') {
+    if (mounted) {
       localStorage.setItem('chatbot-flow', JSON.stringify(updatedFlow));
       console.log('Flow saved to localStorage');
     }
@@ -221,7 +223,7 @@ export default function AdminPanel() {
     setFlow(updatedFlow);
     
     // Save to localStorage
-    if (typeof window !== 'undefined') {
+    if (mounted) {
       localStorage.setItem('chatbot-flow', JSON.stringify(updatedFlow));
     }
     
@@ -241,7 +243,7 @@ export default function AdminPanel() {
     setFlow(newFlow);
     
     // Save to localStorage
-    if (typeof window !== 'undefined') {
+    if (mounted) {
       localStorage.setItem('chatbot-flow', JSON.stringify(newFlow));
     }
     
@@ -261,7 +263,7 @@ export default function AdminPanel() {
     setFlow(updatedFlow);
     
     // Save to localStorage
-    if (typeof window !== 'undefined') {
+    if (mounted) {
       localStorage.setItem('chatbot-flow', JSON.stringify(updatedFlow));
     }
   };
@@ -278,7 +280,7 @@ export default function AdminPanel() {
     setFlow(updatedFlow);
     
     // Save to localStorage
-    if (typeof window !== 'undefined') {
+    if (mounted) {
       localStorage.setItem('chatbot-flow', JSON.stringify(updatedFlow));
     }
   };
@@ -287,7 +289,7 @@ export default function AdminPanel() {
   const handleResetFlow = () => {
     if (!window.confirm('Reset flow to original? This will lose all changes.')) return;
     setFlow({ ...initialFlow });
-    if (typeof window !== 'undefined') {
+    if (mounted) {
       localStorage.removeItem('chatbot-flow');
     }
     setSelectedNodeId('entry');
@@ -322,7 +324,7 @@ export default function AdminPanel() {
           try {
             const importedFlow = JSON.parse(e.target?.result as string);
             setFlow(importedFlow);
-            if (typeof window !== 'undefined') {
+            if (mounted) {
               localStorage.setItem('chatbot-flow', JSON.stringify(importedFlow));
             }
             alert('Flow imported successfully!');
@@ -373,7 +375,7 @@ export default function AdminPanel() {
           
           {/* Status indicator */}
           <div className="text-sm text-gray-600">
-            {typeof window !== 'undefined' && localStorage.getItem('chatbot-flow') 
+            {mounted && localStorage.getItem('chatbot-flow') 
               ? '🟢 Using saved flow data (changes persist across reloads)' 
               : '🟡 Using original flow data (changes will be lost on reload)'}
           </div>
