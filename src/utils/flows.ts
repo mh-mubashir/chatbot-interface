@@ -23,8 +23,139 @@ export const chatbotFlow: Record<string, FlowNode> = {
     type: "category",
     message: "Please select a resource:",
     options: [
-      { label: "Course Registration and Planning", next: "grad_course_registration" }
+      { label: "Course Registration and Planning", next: "grad_course_registration" },
+      { label: "Meet with an academic advisor", next: "grad_academic_advisor" },
+      { label: "Forms", next: "grad_forms" },
+      { label: "Graduation", next: "grad_graduation" },
+      { label: "Student Employment", next: "grad_student_employment" },
+      { label: "Co-op", next: "grad_coop" },
+      { label: "Frequently Asked Questions", next: "grad_faq" },
+      { label: "Who is my Advisor", next: "grad_who_is_my_advisor" }
     ]
+  },
+  // --- GRADUATE GRADUATION ---
+  grad_graduation: {
+    id: "grad_graduation",
+    type: "sub_option",
+    message: "Select your question:",
+    options: [
+      { label: "Where can I find information about graduation?", next: "grad_graduation_info" }
+    ]
+  },
+  grad_graduation_info: {
+    id: "grad_graduation_info",
+    type: "response",
+    message: "Any questions you may have regarding applying to graduate, your diploma, ceremony information, deadlines, parking, accessible seating, tickets, and regalia can be found on the official Northeastern Commencement website FAQ page. [Home - Northeastern Commencement](https://commencement.northeastern.edu/)<br><br>Find out everything you need to do in the months, weeks, and days leading up to graduation—and tips for the day itself. If you have any remaining questions, please reach out to your academic advisor.",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  // --- GRADUATE STUDENT EMPLOYMENT ---
+  grad_student_employment: {
+    id: "grad_student_employment",
+    type: "sub_option",
+    message: "Select your question:",
+    options: [
+      { label: "Where can I find information about student employment/on-campus job opportunities?", next: "grad_student_employment_info" }
+    ]
+  },
+  grad_student_employment_info: {
+    id: "grad_student_employment_info",
+    type: "response",
+    message: "Once you are registered as a student at Northeastern, you can access hourly on-campus job postings through Northeastern’s Student Employment, Graduate Assistantships, and Fellowships (SEGAF) Office web service. The SEGAF Office manages all student employment on campus. Students interested in applying for an on-campus job must log into the SEGAF web service through the “Self-Service” tab in their myNortheastern portal.",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  // --- GRADUATE CO-OP ---
+  grad_coop: {
+    id: "grad_coop",
+    type: "sub_option",
+    message: "Select your question:",
+    options: [
+      { label: "Where can I find information about co-op?", next: "grad_coop_info" }
+    ]
+  },
+  grad_coop_info: {
+    id: "grad_coop_info",
+    type: "response",
+    message: "[Graduate Co-op FAQ page](https://coe.northeastern.edu/academics-experiential-learning/co-op-experiential-learning/co-op/graduate-co-op/co-op-faqs/)",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  // --- GRADUATE FAQ ---
+  grad_faq: {
+    id: "grad_faq",
+    type: "sub_option",
+    message: "Select your question:",
+    options: [
+      { label: "Not sure what to ask? Here is a link to our FAQs (Frequently Asked Questions)", next: "grad_faq_link" }
+    ]
+  },
+  grad_faq_link: {
+    id: "grad_faq_link",
+    type: "response",
+    message: "https://coe.northeastern.edu/academics-experiential-learning/graduate-school-of-engineering/graduate-student-services/faqs-for-newly-admitted-and-current-students/",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  // --- GRADUATE WHO IS MY ADVISOR ---
+  grad_who_is_my_advisor: {
+    id: "grad_who_is_my_advisor",
+    type: "sub_option",
+    message: "Are you asking about your Academic Advisor, PhD Faculty Advisor, Co-op Advisor, MS Thesis Advisor, or Program Contact?",
+    options: [
+      { label: "MS Thesis Advisor", next: "grad_ms_thesis_advisor" },
+      { label: "Co-op Advisor", next: "grad_coop_advisor" },
+      { label: "PhD Faculty Advisor", next: "grad_phd_faculty_advisor" },
+      { label: "Academic Advisor", next: "grad_academic_advisor_who" },
+      { label: "Program Contact", next: "grad_program_contact" }
+    ]
+  },
+  grad_ms_thesis_advisor: {
+    id: "grad_ms_thesis_advisor",
+    type: "response",
+    message: "To find your MS Thesis Advisor, please reach out to your [Program Contact](https://coe.northeastern.edu/academics-experiential-learning/graduate-school-of-engineering/graduate-student-services/)",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  grad_coop_advisor: {
+    id: "grad_coop_advisor",
+    type: "response",
+    message: "To find information about your Co-op advisor, please visit the [Co-op contacts page](https://coe.northeastern.edu/academics-experiential-learning/co-op-experiential-learning/co-op/co-op-coordinators/)",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  grad_phd_faculty_advisor: {
+    id: "grad_phd_faculty_advisor",
+    type: "response",
+    message: "If you are a new student, a PhD Faculty Advisor was assigned to you at the time of admission. Please refer to your admissions letter to find the name of your PhD Faculty Advisor. If you have any further questions, feel free to contact your [Program Contact](https://coe.northeastern.edu/academics-experiential-learning/graduate-school-of-engineering/graduate-student-services/) or email {gradadvising@northeastern.edu}.<br><br>If you are a continuing student and are not currently working with a PhD Faculty Advisor, please reach out to your Program Contact or email coe-phd-{gradadvising@northeastern.edu} for assistance.",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  grad_academic_advisor_who: {
+    id: "grad_academic_advisor_who",
+    type: "response",
+    message: "Academic advisor are assigned to new students following the end of the add/drop period. If you are a continuing students you should see your advisor on your student hub. If you are a new student or do not see your advisor in your Student Hub, please reach out to {CoE-GradAdvising@northeastern.edu}.<br><br>You may also want to attend our [virtual office hours](Virtual Drop-In Advising link.) to meet with an advisor or schedule a 20 minute virtual or in-person appointment to meet with an academic advisor via [Navigate](https://northeastern.campus.eab.com/). ([See Navigate Instructions](https://coe.northeastern.edu/wp-content/uploads/pdfs/coe/gse/navigate-instructions.pdf)).",
+    options: [ { label: "Are you a student on the Boston campus or a campus outside of Boston?", next: "grad_boston_or_not" }, { label: "Continue", next: "satisfaction" } ]
+  },
+  grad_program_contact: {
+    id: "grad_program_contact",
+    type: "response",
+    message: "To find your Program Contact, please visit the [Grad Student Services](https://coe.northeastern.edu/academics-experiential-learning/graduate-school-of-engineering/graduate-student-services/) page.",
+    options: [ { label: "Are you a student on the Boston campus or a campus outside of Boston?", next: "grad_boston_or_not" }, { label: "Continue", next: "satisfaction" } ]
+  },
+  grad_boston_or_not: {
+    id: "grad_boston_or_not",
+    type: "sub_option",
+    message: "Are you a student on the Boston campus or a campus outside of Boston?",
+    options: [
+      { label: "Student outside of Boston", next: "grad_outside_boston" },
+      { label: "Boston Student", next: "grad_boston_student" }
+    ]
+  },
+  grad_outside_boston: {
+    id: "grad_outside_boston",
+    type: "response",
+    message: "You can find your Program Contact name and contact information on the [Grad Student Services](https://coe.northeastern.edu/academics-experiential-learning/graduate-school-of-engineering/graduate-student-services/) page under the Global Campus Network Tab as organized by major.<br><br>You may want to reach out to your Program Contact regarding:<br>- Specific questions about courses (content, assignments, grading, etc.)<br>- Signatures for Standard Petition forms and Registration Override Request forms<br>- Questions about directed study, Master’s Thesis/Project, Dissertation<br>- Advice on course selection for a particular career path or area of interest",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  grad_boston_student: {
+    id: "grad_boston_student",
+    type: "response",
+    message: "You can find your Program Contact name and contact information on the [Grad Student Services](https://coe.northeastern.edu/academics-experiential-learning/graduate-school-of-engineering/graduate-student-services/) page under the Boston Tab as organized by major.<br><br>You may want to reach out to your Program Contact regarding:<br>- Specific questions about courses (content, assignments, grading, etc.)<br>- Signatures for Standard Petition forms and Registration Override Request forms<br>- Questions about directed study, Master’s Thesis/Project, Dissertation<br>- Advice on course selection for a particular career path or area of interest",
+    options: [{ label: "Continue", next: "satisfaction" }]
   },
   // --- GRADUATE COURSE REGISTRATION ---
   grad_course_registration: {
@@ -36,6 +167,50 @@ export const chatbotFlow: Record<string, FlowNode> = {
       { label: "Registration Issues and Support", next: "grad_registration_issues" },
       { label: "Registration Requirements", next: "grad_registration_requirements" }
     ]
+  },
+  // --- GRADUATE ACADEMIC ADVISOR ---
+  grad_academic_advisor: {
+    id: "grad_academic_advisor",
+    type: "sub_option",
+    message: "Select your question:",
+    options: [
+      { label: "What can my academic advisor help me with?", next: "grad_advisor_help" },
+      { label: "How do I schedule an appointment with my academic advisor?", next: "grad_schedule_advisor" },
+      { label: "Where can I find who my academic advisor is?", next: "grad_find_advisor" }
+    ]
+  },
+  // --- GRADUATE FORMS ---
+  grad_forms: {
+    id: "grad_forms",
+    type: "sub_option",
+    message: "Select your question:",
+    options: [
+      { label: "I have a form that needs to be signed by my academic advisor/instructor/program contact.", next: "grad_form_signing" }
+    ]
+  },
+  grad_form_signing: {
+    id: "grad_form_signing",
+    type: "response",
+    message: "To see information about graduate forms, please visit the [graduate forms website](https://coe.northeastern.edu/academics-experiential-learning/graduate-school-of-engineering/graduate-student-services/graduate-forms/). You may also want to visit the [New Student FAQ](https://service.northeastern.edu/registrar?id=kb_article_view&sysparm_article=KB000020032&sys_kb_id=57dc77d487089e143b170e96cebb35a6&spa=1) page for more information about common registration errors that may require a graduate form. Please contact {coe-gradadvising@northeastern.edu} if you have additional questions about your forms.",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  grad_advisor_help: {
+    id: "grad_advisor_help",
+    type: "response",
+    message: "The Academic Advisors in the Graduate Student Services office can help with various concerns regarding your program and student record, including registering for classes, reviewing degree requirements, and more. See this page for more details.",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  grad_schedule_advisor: {
+    id: "grad_schedule_advisor",
+    type: "response",
+    message: "You can schedule a 20-minute virtual or in-person appointment to meet with an academic advisor via [Navigate](https://northeastern.campus.eab.com/). ([See Navigate Instructions](https://coe.northeastern.edu/wp-content/uploads/pdfs/coe/gse/navigate-instructions.pdf)).",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  grad_find_advisor: {
+    id: "grad_find_advisor",
+    type: "response",
+    message: "Academic advisor are assigned to new students following the end of the add/drop period. If you are a continuing students you should see your advisor on your student hub. If you are a new student or do not see your advisor in your Student Hub, please reach out to {CoE-GradAdvising@northeastern.edu}",
+    options: [{ label: "Continue", next: "satisfaction" }]
   },
   // --- GLOBAL CAMPUS NETWORK ---
   grad_global_campus: {
