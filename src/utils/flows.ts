@@ -379,7 +379,9 @@ Please note: In a case where a course is offered that is not 4SH, please contact
     options: [
       { label: "Academic Advising and Support Resources", next: "advising_support" },
       { label: "Course Registration", next: "course_registration" },
-      { label: "Degree Audit, Grades, and Transcripts", next: "degree_audit_grades_transcripts" }
+      { label: "Degree Audit, Grades, and Transcripts", next: "degree_audit_grades_transcripts" },
+      { label: "Academic Standards, Policies, and Procedures", next: "academic_standards_policies" },
+      { label: "Change of Major & Minor Declaration", next: "change_major_minor" }
     ]
   },
   // --- NEW TIER 1: COURSE REGISTRATION ---
@@ -777,6 +779,117 @@ Please note: In a case where a course is offered that is not 4SH, please contact
     id: "review_unofficial_transcript",
     type: "response",
     message: "Current students can view and print unofficial transcripts on the Student Hub.",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  // --- NEW TIER 1: ACADEMIC STANDARDS, POLICIES, AND PROCEDURES ---
+  academic_standards_policies: {
+    id: "academic_standards_policies",
+    type: "sub_option",
+    message: "Select your question:",
+    options: [
+      { label: "Academic Standards", next: "academic_standards" },
+      { label: "Policies and Procedures", next: "policies_procedures" }
+    ]
+  },
+  // --- ACADEMIC STANDARDS ---
+  academic_standards: {
+    id: "academic_standards",
+    type: "sub_option",
+    message: "Select your question:",
+    options: [
+      { label: "COE Academic Standards", next: "coe_academic_standards" },
+      { label: "Academic probation", next: "academic_probation" },
+      { label: "Academic dismissal", next: "academic_dismissal" }
+    ]
+  },
+  coe_academic_standards: {
+    id: "coe_academic_standards",
+    type: "response",
+    message: "In addition to meeting university progression standards, it is expected that undergraduate engineering students enroll in four (4 credit) courses, with corresponding labs and recitations, and successfully complete at least 12 semester hours each academic semester (fall, spring) with an acceptable grade-point average (1.8 term GPA for first year students, 2.0 cumulative GPA for upper-level and transfer students.) Information on COE Academic Standards can be found here and University Academic Progression Standards can be found in the undergraduate catalog.",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  academic_probation: {
+    id: "academic_probation",
+    type: "response",
+    message: "Students will be placed on academic probation effective for the following academic semester for any of the reasons noted below:\n\nFirst-year Students:\n- Not earning a semester GPA of at least a 1.800 at the end of an academic semester (fall, spring)\n- Not earning at least 12 semester hours at the end of an academic semester (fall, spring)\n\nUpper-level and Transfer Students:\n- Not earning at least 12 semester hours in an academic semester (fall, spring)\n- Not maintaining a cumulative GPA of at least 2.000 at the end of an academic semester (fall, spring)\n\nA notation of the academic probation action will appear on the internal record but not on the permanent transcript.",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  academic_dismissal: {
+    id: "academic_dismissal",
+    type: "response",
+    message: "Students who earn below a 1.000 GPA or earn fewer than 4 semester hours in any academic semester (fall, spring) may be dismissed, regardless of their prior academic status. After two semesters (fall, spring) on academic probation, students may be academically dismissed if they fail to meet academic progression standards.\n\nA notation of the academic dismissal action will appear on the permanent transcript.",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  // --- POLICIES AND PROCEDURES ---
+  policies_procedures: {
+    id: "policies_procedures",
+    type: "sub_option",
+    message: "Select your question:",
+    options: [
+      { label: "Pass/Fail coursework", next: "pass_fail_coursework" },
+      { label: "Repeat a course", next: "repeat_course" },
+      { label: "Take courses outside of Northeastern", next: "courses_outside_northeastern" },
+      { label: "Additional academic policies", next: "additional_academic_policies" }
+    ]
+  },
+  pass_fail_coursework: {
+    id: "pass_fail_coursework",
+    type: "response",
+    message: "Any student not on academic probation may register for one pass/fail course per semester if permission is granted by the college in which the student is enrolled and if the course is offered on a pass/fail basis. Pass/fail courses are normally restricted to electives outside the major, outside any minor, and outside NUpath requirements.\n\nBefore requesting a pass/fail grade from an instructor, students should meet with their academic advisor to determine whether doing so will disqualify the course from satisfying a program requirement or elective.\n\nIn general, courses taken on a pass/fail basis can be used only to satisfy general electives. Department and/or college faculty offering a course determine whether the pass/fail system may be used. Grades recorded on the basis of the pass/fail system do not figure in the computation of the grade-point average. Satisfactory completion of all courses taken on the pass/fail system is designated on the student's permanent record by the letter S. Unsatisfactory work is designated by the letter U.\n\nTo use the pass/fail system, students must meet all prerequisites for the course and declare by the end of the second week of the semester their intention to receive a pass/fail grade. This deadline may be extended to the end of the eighth week of a full semester or the end of the fifth week of summer half semester at the option of the instructor.\n\nStudents must submit a Petition to Elect Pass/Fail Grade, signed by the faculty member. The petition and deadlines can be found here.",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  repeat_course: {
+    id: "repeat_course",
+    type: "response",
+    message: "When the appropriate course is available, students may retake a nonrepeatable course to attempt to earn a better grade. In all cases, the most recent grade earned in a course is the one used in calculating the overall grade-point average followed by the retake notation I on the transcript, indicating the course grade is included in the overall GPA calculation. Previous grades earned in the course remain on the transcript followed by the retake notation of E, signifying that that course grade has been excluded from the GPA calculation. Students should consult their academic advisor before retaking a course. Students are required to pay normal tuition for all retaken coursework.",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  courses_outside_northeastern: {
+    id: "courses_outside_northeastern",
+    type: "response",
+    message: "Once they matriculate, students are expected to complete all coursework for their degree at Northeastern University; or an entity in a formal contractual, consortial, or partnership relationship with Northeastern; or at an approved study-abroad program. In some cases, in order to clear a deficiency, to permit students access to courses deemed by their respective advisors and colleges to be important for their education but unavailable to them at Northeastern, or to remain on track for graduation, a student may petition their college for permission to take a course at another accredited institution.\n\nStudents who wish to take courses at another institution and transfer the credit to Northeastern must obtain prior approval from their assigned academic advisor. The Office of the University Registrar validates accredited institutions to ensure credit transferability. The student must earn a C (2.000) or better for a course to be considered for transfer and must supply the official transcript from that institution after the course has been completed. Students are responsible for providing documentation on the institution's accreditation, course grading, and course descriptions prior to approval.",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  additional_academic_policies: {
+    id: "additional_academic_policies",
+    type: "response",
+    message: "Information on University and Undergraduate Academic Policies and Procedures can be found here.",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  // --- NEW TIER 1: CHANGE OF MAJOR & MINOR DECLARATION ---
+  change_major_minor: {
+    id: "change_major_minor",
+    type: "sub_option",
+    message: "Select your question:",
+    options: [
+      { label: "Change to a different COE major", next: "change_coe_major" },
+      { label: "Change to a major outside of COE", next: "change_outside_coe_major" },
+      { label: "Declare a COE minor", next: "declare_coe_minor" },
+      { label: "Declare a minor outside of COE", next: "declare_outside_coe_minor" }
+    ]
+  },
+  change_coe_major: {
+    id: "change_coe_major",
+    type: "response",
+    message: "Current COE students on the Boston campus, can request to change their major through the process outlined on the COE Advising sharepoint: https://northeastern.sharepoint.com/sites/COEUndergraduateStudentSupport/SitePages/Majors-and-Minors(1).aspx\n\nPlease speak to your Academic Advisor to understand how changing your major can affect your degree requirements and graduation date.",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  change_outside_coe_major: {
+    id: "change_outside_coe_major",
+    type: "response",
+    message: "Current COE students on the Boston campus, can request to change their major through the process outlined on specific College's advising website.",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  declare_coe_minor: {
+    id: "declare_coe_minor",
+    type: "response",
+    message: "Boston undergraduate students can declare a COE minor through the process outlined on the COE Sharepoint: https://northeastern.sharepoint.com/sites/COEUndergraduateStudentSupport/SitePages/Majors-and-Minors(1).aspx.\n\nThe Academic Catalog includes important minor declaring policies and deadlines: https://catalog.northeastern.edu/undergraduate/academic-policies-procedures/degrees-majors-minors/#text",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  declare_outside_coe_minor: {
+    id: "declare_outside_coe_minor",
+    type: "response",
+    message: "Current COE students on the Boston campus, can request to declare a non-COE minor through the process outlined on specific College's advising website. The Academic Catalog includes important minor declaring policies and deadlines: https://catalog.northeastern.edu/undergraduate/academic-policies-procedures/degrees-majors-minors/#text",
     options: [{ label: "Continue", next: "satisfaction" }]
   }
 }; 
