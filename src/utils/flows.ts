@@ -20,9 +20,116 @@ export const chatbotFlow: Record<string, FlowNode> = {
   },
   grad_under_dev: {
     id: "grad_under_dev",
+    type: "category",
+    message: "Please select a resource:",
+    options: [
+      { label: "Course Registration and Planning", next: "grad_course_registration" }
+    ]
+  },
+  // --- GRADUATE COURSE REGISTRATION ---
+  grad_course_registration: {
+    id: "grad_course_registration",
+    type: "sub_option",
+    message: "What do you need help with regarding course registration?",
+    options: [
+      { label: "Global Campus Network", next: "grad_global_campus" },
+      { label: "Registration Issues and Support", next: "grad_registration_issues" },
+      { label: "Registration Requirements", next: "grad_registration_requirements" }
+    ]
+  },
+  // --- GLOBAL CAMPUS NETWORK ---
+  grad_global_campus: {
+    id: "grad_global_campus",
+    type: "sub_option",
+    message: "Select your question:",
+    options: [
+      { label: "Can I take a class at another campus?", next: "grad_take_class_other_campus" },
+      { label: "How can I transfer to another campus?", next: "grad_transfer_campus" }
+    ]
+  },
+  grad_take_class_other_campus: {
+    id: "grad_take_class_other_campus",
     type: "response",
-    message: "Graduate flows are under development.",
-    options: [{ label: "Back", next: "entry" }]
+    message: "No, if you wish to enroll in a Livecast or on-ground course, they must be offered on your designated campus. Please refer to the courses' attributes as listed in the [Dynamic Schedule](https://bnrordsp.neu.edu/ssb-prod/NEUCLSS.p_disp_dyn_sched).",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  grad_transfer_campus: {
+    id: "grad_transfer_campus",
+    type: "response",
+    message: "Please review the Campus Transfer and Location Change Policy for MS Students and contact your academic advisor if you have any questions.",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  // --- REGISTRATION ISSUES AND SUPPORT ---
+  grad_registration_issues: {
+    id: "grad_registration_issues",
+    type: "sub_option",
+    message: "Select your question:",
+    options: [
+      { label: "How can I register for a full class?", next: "grad_register_full_class" },
+      { label: "I'm receiving an error when I try to register", next: "grad_registration_error" },
+      { label: "Can I register for two courses that are offered at the same time?", next: "grad_same_time_courses" },
+      { label: "Can I be added to a class after the university-established add date?", next: "grad_add_after_deadline" }
+    ]
+  },
+  grad_register_full_class: {
+    id: "grad_register_full_class",
+    type: "response",
+    message: "Please join the [waitlist](https://registrar.northeastern.edu/article/class-waitlist/). If the waitlist is full (e.g. max 15 students), please watch the waitlist but do not plan on taking the course. Please register for another course that meets your degree requirements. Students will not be overridden into a full class under any circumstances. When you are trying to add yourself to a waitlist for a course and receive the error of \"Closed-waitlist\", this means that the waitlist is at capacity and no additional names can be added to the list at that time.",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  grad_registration_error: {
+    id: "grad_registration_error",
+    type: "response",
+    message: "To view common registration errors, please see [this Registrar knowledge base article](https://service.northeastern.edu/registrar?id=kb_article_view&sysparm_article=KB000020032&sys_kb_id=57dc77d487089e143b170e96cebb35a6&spa=1). You may also want to visit our [Graduate Form Center](https://coe.northeastern.edu/academics-experiential-learning/graduate-school-of-engineering/graduate-student-services/graduate-forms/) or [New Student FAQ.](https://coe.northeastern.edu/academics-experiential-learning/graduate-school-of-engineering/graduate-student-services/faqs-for-newly-admitted-and-current-students/). We recommend that you connect with your academic advisor to discuss any registration errors, you can find your advisor on the student hub or reach out to {coe-gradadvising@northeastern.edu}",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  grad_same_time_courses: {
+    id: "grad_same_time_courses",
+    type: "response",
+    message: "No. The days and times of courses cannot be changed to accommodate specific student registration conflicts. Classes are scheduled at particular times for a variety of reasons, including but not limited to classroom availability, instructor availability, etc. Additionally, the days and times of courses each semester may and will vary semester to semester.",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  grad_add_after_deadline: {
+    id: "grad_add_after_deadline",
+    type: "response",
+    message: "No. Any requests will be denied. If you receive an email from a University entity after the add deadline about enrolling in a course, per department policy, you will not be permitted to register. Please review the [university's academic calendar](https://registrar.northeastern.edu/article/academic-calendar/) for any and all applicable deadlines.",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  // --- REGISTRATION REQUIREMENTS ---
+  grad_registration_requirements: {
+    id: "grad_registration_requirements",
+    type: "sub_option",
+    message: "Select your question:",
+    options: [
+      { label: "What are the requirements for summer registration?", next: "grad_summer_registration" },
+      { label: "What are the registration requirements for international students?", next: "grad_international_requirements" },
+      { label: "Can a student take more credits apart from the degree requirements?", next: "grad_extra_credits" },
+      { label: "Can I take a course outside of my approved electives?", next: "grad_outside_electives" }
+    ]
+  },
+  grad_summer_registration: {
+    id: "grad_summer_registration",
+    type: "response",
+    message: "During the summer sessions, students can ONLY register for two courses (8 Semester Hours), not taking more than 4 Semester Hours in either Summer I or Summer II. Students cannot enroll in 3 courses (12 Semester Hours) during any summer sessions and are not required to register in summer classes as it is considered an optional semester for international students.<br><br>Below you will find the possible enrollment options that the department approves:<br><br>- Option 1: One Full Summer course (4SH) & One Summer I (4SH)<br>- Option 2: One Full Summer course (4SH) & One Summer II (4SH)<br>- Option 3: One Summer I course (4SH) & One Summer II (4SH)<br>- Option 4: Two Full Summer courses (4SH, each)<br>- Option 5: One course in either Summer I, Summer II, or Full Summer<br>- Option 6: No registration<br><br>Please note: In a case where a course is offered that is not 4SH, please contact your [Academic Advisor](https://coe.northeastern.edu/academics-experiential-learning/graduate-school-of-engineering/graduate-student-services/advising-team/) to discuss further.",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  grad_international_requirements: {
+    id: "grad_international_requirements",
+    type: "response",
+    message: "You must be enrolled as a full-time graduate student, enrolled in 8 semester credit hours (4 semester credit hours of which must be on-ground), to comply with a J1 or F1 Visa or Study Permit. See OGS information on [maintaining status](https://international.northeastern.edu/ogs/current-students/understanding-visa-requirements/guidelines-on-maintaining-status/).<br><br>If you are in your last semester and have one course to complete your degree requirements, you must enroll in 4 semester credit hours on-ground. See OGS information on the [final term](https://international.northeastern.edu/ogs/current-students/understanding-visa-requirements/final-term/).",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  grad_extra_credits: {
+    id: "grad_extra_credits",
+    type: "response",
+    message: "If you have available space in your final term, you can take classes depending on availability. International students taking courses that do not count towards your degree requirements or are considered \"extra\" courses could impact your visa status. Please contact Graduate Student Services for any questions: coe-gradadvising@northeastern.edu.",
+    options: [{ label: "Continue", next: "satisfaction" }]
+  },
+  grad_outside_electives: {
+    id: "grad_outside_electives",
+    type: "response",
+    message: "First, check the program requirements listed in your [catalog year](https://registrar.northeastern.edu/group/catalog/). If the course you are interested in is NOT on the list, then you need a [Standard Petition form](https://coe.northeastern.edu/academics-experiential-learning/graduate-school-of-engineering/graduate-student-services/graduate-forms/) to count it towards your program.<br><br>1. Check \"elective outside of approved curriculum\"<br>2. Explain why you feel this course is relevant to your field of study.<br>3. Obtain the necessary signatures stated in the instructions on the form.<br><br>*If your program is part of the Mechanical and Industrial Engineering Department, please fill of the form found under the MIE Course Registration Forms section on the above forms website.",
+    options: [{ label: "Continue", next: "satisfaction" }]
   },
   undergrad_main: {
     id: "undergrad_main",
