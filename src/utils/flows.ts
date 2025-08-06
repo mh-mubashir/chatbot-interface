@@ -148,13 +148,25 @@ export const chatbotFlow: Record<string, FlowNode> = {
   grad_outside_boston: {
     id: "grad_outside_boston",
     type: "response",
-    message: "You can find your Program Contact name and contact information on the [Grad Student Services](https://coe.northeastern.edu/academics-experiential-learning/graduate-school-of-engineering/graduate-student-services/) page under the Global Campus Network Tab as organized by major.<br><br>You may want to reach out to your Program Contact regarding:<br>- Specific questions about courses (content, assignments, grading, etc.)<br>- Signatures for Standard Petition forms and Registration Override Request forms<br>- Questions about directed study, Master’s Thesis/Project, Dissertation<br>- Advice on course selection for a particular career path or area of interest",
+    message: `You can find your Program Contact name and contact information on the [Grad Student Services](https://coe.northeastern.edu/academics-experiential-learning/graduate-school-of-engineering/graduate-student-services/) page under the Global Campus Network Tab as organized by major.
+
+You may want to reach out to your Program Contact regarding:
+- Specific questions about courses (content, assignments, grading, etc.)
+- Signatures for Standard Petition forms and Registration Override Request forms
+- Questions about directed study, Master's Thesis/Project, Dissertation
+- Advice on course selection for a particular career path or area of interest`,
     options: [{ label: "Continue", next: "satisfaction" }]
   },
   grad_boston_student: {
     id: "grad_boston_student",
     type: "response",
-    message: "You can find your Program Contact name and contact information on the [Grad Student Services](https://coe.northeastern.edu/academics-experiential-learning/graduate-school-of-engineering/graduate-student-services/) page under the Boston Tab as organized by major.<br><br>You may want to reach out to your Program Contact regarding:<br>- Specific questions about courses (content, assignments, grading, etc.)<br>- Signatures for Standard Petition forms and Registration Override Request forms<br>- Questions about directed study, Master’s Thesis/Project, Dissertation<br>- Advice on course selection for a particular career path or area of interest",
+    message: `You can find your Program Contact name and contact information on the [Grad Student Services](https://coe.northeastern.edu/academics-experiential-learning/graduate-school-of-engineering/graduate-student-services/) page under the Boston Tab as organized by major.
+
+You may want to reach out to your Program Contact regarding:
+- Specific questions about courses (content, assignments, grading, etc.)
+- Signatures for Standard Petition forms and Registration Override Request forms
+- Questions about directed study, Master's Thesis/Project, Dissertation
+- Advice on course selection for a particular career path or area of interest`,
     options: [{ label: "Continue", next: "satisfaction" }]
   },
   // --- GRADUATE COURSE REGISTRATION ---
@@ -285,7 +297,17 @@ export const chatbotFlow: Record<string, FlowNode> = {
   grad_summer_registration: {
     id: "grad_summer_registration",
     type: "response",
-    message: "During the summer sessions, students can ONLY register for two courses (8 Semester Hours), not taking more than 4 Semester Hours in either Summer I or Summer II. Students cannot enroll in 3 courses (12 Semester Hours) during any summer sessions and are not required to register in summer classes as it is considered an optional semester for international students.<br><br>Below you will find the possible enrollment options that the department approves:<br><br>- Option 1: One Full Summer course (4SH) & One Summer I (4SH)<br>- Option 2: One Full Summer course (4SH) & One Summer II (4SH)<br>- Option 3: One Summer I course (4SH) & One Summer II (4SH)<br>- Option 4: Two Full Summer courses (4SH, each)<br>- Option 5: One course in either Summer I, Summer II, or Full Summer<br>- Option 6: No registration<br><br>Please note: In a case where a course is offered that is not 4SH, please contact your [Academic Advisor](https://coe.northeastern.edu/academics-experiential-learning/graduate-school-of-engineering/graduate-student-services/advising-team/) to discuss further.",
+    message: `During the summer sessions, students can ONLY register for two courses (8 Semester Hours), not taking more than 4 Semester Hours in either Summer I or Summer II. Students cannot enroll in 3 courses (12 Semester Hours) during any summer sessions and are not required to register in summer classes as it is considered an optional semester for international students.
+
+Below you will find the possible enrollment options that the department approves:
+- Option 1: One Full Summer course (4SH) & One Summer I (4SH)
+- Option 2: One Full Summer course (4SH) & One Summer II (4SH)
+- Option 3: One Summer I course (4SH) & One Summer II (4SH)
+- Option 4: Two Full Summer courses (4SH, each)
+- Option 5: One course in either Summer I, Summer II, or Full Summer
+- Option 6: No registration
+
+Please note: In a case where a course is offered that is not 4SH, please contact your [Academic Advisor](https://coe.northeastern.edu/academics-experiential-learning/graduate-school-of-engineering/graduate-student-services/advising-team/) to discuss further.`,
     options: [{ label: "Continue", next: "satisfaction" }]
   },
   grad_international_requirements: {
@@ -303,7 +325,13 @@ export const chatbotFlow: Record<string, FlowNode> = {
   grad_outside_electives: {
     id: "grad_outside_electives",
     type: "response",
-    message: "First, check the program requirements listed in your [catalog year](https://registrar.northeastern.edu/group/catalog/). If the course you are interested in is NOT on the list, then you need a [Standard Petition form](https://coe.northeastern.edu/academics-experiential-learning/graduate-school-of-engineering/graduate-student-services/graduate-forms/) to count it towards your program.<br><br>1. Check \"elective outside of approved curriculum\"<br>2. Explain why you feel this course is relevant to your field of study.<br>3. Obtain the necessary signatures stated in the instructions on the form.<br><br>*If your program is part of the Mechanical and Industrial Engineering Department, please fill of the form found under the MIE Course Registration Forms section on the above forms website.",
+    message: `First, check the program requirements listed in your [catalog year](https://registrar.northeastern.edu/group/catalog/). If the course you are interested in is NOT on the list, then you need a [Standard Petition form](https://coe.northeastern.edu/academics-experiential-learning/graduate-school-of-engineering/graduate-student-services/graduate-forms/) to count it towards your program.
+
+- Check "elective outside of approved curriculum"
+- Explain why you feel this course is relevant to your field of study.
+- Obtain the necessary signatures stated in the instructions on the form.
+
+*If your program is part of the Mechanical and Industrial Engineering Department, please fill of the form found under the MIE Course Registration Forms section on the above forms website.`,
     options: [{ label: "Continue", next: "satisfaction" }]
   },
   undergrad_main: {
