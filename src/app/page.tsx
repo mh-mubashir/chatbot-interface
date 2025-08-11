@@ -58,7 +58,7 @@ export default function Home() {
               <p>
                 To get started, click the chatbot icon located in the bottom left corner of your screen and select your student status 
                 (undergraduate or graduate). Then follow the prompts to find the information you need. If you select the wrong option 
-                or want to return to the main menu, click "back" or "start over."
+                or want to return to the main menu, click &ldquo;back&rdquo; or &ldquo;start over.&rdquo;
               </p>
               <p>
                 This chatbot is an internal pilot program developed by the College of Engineering through the vision of the College Dean, 
