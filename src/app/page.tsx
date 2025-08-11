@@ -33,9 +33,9 @@ export default function Home() {
             <span className="block text-red-600">Assistant</span>
           </h1>
           <p className="text-xl md:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed mb-12">
-            Get instant answers to your academic advising questions, 24/7. 
-            Our intelligent assistant helps both undergraduate and graduate students 
-            with common academic queries.
+            Get immediate answers to some of your academic advising questions anytime, day or night. 
+            Our AI-powered COE advising assistant provides instant support for undergraduate and graduate students 
+            navigating academic resources, policies, and procedures.
           </p>
           <div className="flex justify-center">
             <div className="inline-flex items-center space-x-3 bg-gradient-to-r from-red-600 to-red-700 text-white px-8 py-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
@@ -45,148 +45,73 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Features Grid */}
-        <div className="grid md:grid-cols-2 gap-12 mb-20">
-          <div className="group">
-            <div className="bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 p-8 border border-gray-100 hover:border-red-200 transform hover:-translate-y-2">
-              <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-red-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                <span className="text-2xl text-white">📚</span>
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">For Students</h3>
-              <ul className="space-y-4 text-gray-600">
-                <li className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <span>24/7 support for all your advising questions</span>
-                </li>
-                <li className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <span>Covers both undergraduate and graduate programs</span>
-                </li>
-                <li className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <span>Instant answers to routine questions</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="group">
-            <div className="bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 p-8 border border-gray-100 hover:border-red-200 transform hover:-translate-y-2">
-              <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-red-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                <span className="text-2xl text-white">🎯</span>
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">For Advisors</h3>
-              <ul className="space-y-4 text-gray-600">
-                <li className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <span>Reduces repetitive workload for staff</span>
-                </li>
-                <li className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <span>Continuously improved based on feedback</span>
-                </li>
-                <li className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-red-500 rounded-full mt-2 flex-shrink-0"></div>
-                  <span>Focus on complex, personalized queries</span>
-                </li>
-              </ul>
+        {/* What the Chatbot Is - Completely Revised */}
+        <div className="bg-white rounded-3xl shadow-xl p-12 mb-16 border border-gray-100">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-gray-900 mb-6">Navigating the COE AI Advising Assistant</h2>
+            <div className="text-xl text-gray-600 max-w-4xl mx-auto space-y-6 text-left">
+              <p>
+                Our intelligent chatbot is designed to answer your most common academic advising questions as a College of Engineering student. 
+                Get answers to your questions anytime, anywhere. No waiting for office hours or scheduling appointments for common inquiries. 
+                More personalized questions related to curriculum planning are best addressed by your academic advisor.
+              </p>
+              <p>
+                To get started, click the chatbot icon located in the bottom left corner of your screen and select your student status 
+                (undergraduate or graduate). Then follow the prompts to find the information you need. If you select the wrong option 
+                or want to return to the main menu, click "back" or "start over."
+              </p>
+              <p>
+                This chatbot is an internal pilot program developed by the College of Engineering through the vision of the College Dean, 
+                in collaboration with both Graduate and Undergraduate Advising Offices. With students located around the globe, 
+                we wanted to ensure 24/7 access to essential resources regardless of time zone.
+              </p>
+              <p>
+                This is just one of many COE-specific resources available to support students in meeting their academic goals; 
+                the chatbot is designed to address the most common questions students ask, but it is not meant to replace our 
+                advising services - you can schedule a meeting with an academic advisor anytime for personalized guidance. 
+                Our collective mission is to provide equitable access to advising support and enhance the overall college experience.
+              </p>
+              <p>
+                This chatbot is in its initial development phase, and we welcome student feedback to improve its usability and content. 
+                Students can submit feedback by visiting our feedback form.
+              </p>
             </div>
           </div>
         </div>
 
-        {/* What the Chatbot Is */}
+        {/* Contact Information Section */}
         <div className="bg-white rounded-3xl shadow-xl p-12 mb-16 border border-gray-100">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-900 mb-6">What the Chatbot Is</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Our intelligent chatbot helps answer frequent advising questions for both 
-              graduate and undergraduate students in the College of Engineering.
+            <h2 className="text-4xl font-bold text-gray-900 mb-6">Need More Help?</h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+              Still not finding what you are looking for? Contact your academic advisor or stop by the academic advising office for support.
             </p>
           </div>
           <div className="grid md:grid-cols-2 gap-8">
             <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-2xl p-8">
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">Smart Assistance</h3>
-              <p className="text-gray-600">
-                Designed to reduce routine workload for advisors, allowing them to 
-                focus on more complex, personalized queries while providing you with 
-                immediate assistance.
-              </p>
+              <h3 className="text-2xl font-semibold text-gray-900 mb-4">Undergraduate Academic Advising</h3>
+              <div className="space-y-3 text-gray-700">
+                <p className="flex items-center">
+                  <span className="text-red-600 mr-3">📍</span>
+                  <span>Office: 147 Snell Engineering Center</span>
+                </p>
+                <p className="flex items-center">
+                  <span className="text-red-600 mr-3">✉️</span>
+                  <span>Email: coeadvising@northeastern.edu</span>
+                </p>
+              </div>
             </div>
             <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-8">
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">Always Available</h3>
-              <p className="text-gray-600">
-                Get answers to your questions anytime, anywhere. No waiting for office hours 
-                or scheduling appointments for common inquiries.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Who Developed It */}
-        <div className="bg-white rounded-3xl shadow-xl p-12 mb-16 border border-gray-100">
-          <h2 className="text-4xl font-bold text-gray-900 mb-8 text-center">Who Developed It</h2>
-          <p className="text-xl text-gray-600 text-center mb-12 max-w-4xl mx-auto">
-            This chatbot is an internal pilot project developed by the College of Engineering, 
-            with input and representation from both Graduate and Undergraduate Advising Offices.
-          </p>
-          
-          {/* Development Team */}
-          <div className="mt-12">
-            <h3 className="text-2xl font-bold text-gray-900 mb-8 text-center flex items-center justify-center">
-              <span className="text-red-600 mr-3">🎉</span>
-              <span>Development Team</span>
-              <span className="text-red-600 ml-3">🎉</span>
-            </h3>
-            <div className="text-center mb-8">
-              <p className="text-gray-600 italic text-lg">Special thanks to our amazing team members who made this project possible</p>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-              <div className="group">
-                <div className="relative bg-gradient-to-br from-red-50 to-red-100 rounded-2xl p-6 border border-red-200 hover:border-red-300 transition-all duration-300 transform hover:scale-105">
-                  <div className="text-center">
-                    <div className="text-3xl mb-4">🌟</div>
-                    <h4 className="text-xl font-semibold text-gray-900 mb-2">Polina Starobinets</h4>
-                    <p className="text-red-600 font-medium">Project Lead</p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="group">
-                <div className="relative bg-gradient-to-br from-red-50 to-red-100 rounded-2xl p-6 border border-red-200 hover:border-red-300 transition-all duration-300 transform hover:scale-105">
-                  <div className="text-center">
-                    <div className="text-3xl mb-4">✨</div>
-                    <h4 className="text-xl font-semibold text-gray-900 mb-2">Lindsay Werner</h4>
-                    <p className="text-red-600 font-medium">Graduate Advising Office Lead</p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="group">
-                <div className="relative bg-gradient-to-br from-red-50 to-red-100 rounded-2xl p-6 border border-red-200 hover:border-red-300 transition-all duration-300 transform hover:scale-105">
-                  <div className="text-center">
-                    <div className="text-3xl mb-4">💫</div>
-                    <h4 className="text-xl font-semibold text-gray-900 mb-2">Krystal Ristaino</h4>
-                    <p className="text-red-600 font-medium">Undergraduate Advising Office Lead</p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="group">
-                <div className="relative bg-gradient-to-br from-red-50 to-red-100 rounded-2xl p-6 border border-red-200 hover:border-red-300 transition-all duration-300 transform hover:scale-105">
-                  <div className="text-center">
-                    <div className="text-3xl mb-4">🚀</div>
-                    <h4 className="text-xl font-semibold text-gray-900 mb-2">Gunar Shirner</h4>
-                    <p className="text-red-600 font-medium">Technical Lead</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="text-center mt-12">
-              <div className="inline-flex items-center space-x-3 bg-gradient-to-r from-red-600 to-red-700 text-white px-8 py-4 rounded-full shadow-lg">
-                <span className="text-xl">🎊</span>
-                <span className="font-semibold text-lg">Thank you for your help and support!</span>
-                <span className="text-xl">🎊</span>
+              <h3 className="text-2xl font-semibold text-gray-900 mb-4">Graduate Academic Advising</h3>
+              <div className="space-y-3 text-gray-700">
+                <p className="flex items-center">
+                  <span className="text-red-600 mr-3">📍</span>
+                  <span>Office: 130 Snell Engineering Center</span>
+                </p>
+                <p className="flex items-center">
+                  <span className="text-red-600 mr-3">✉️</span>
+                  <span>Email: COE-gradadvising@northeastern.edu</span>
+                </p>
               </div>
             </div>
           </div>
@@ -224,18 +149,8 @@ export default function Home() {
           <h2 className="text-4xl font-bold text-gray-900 mb-8 text-center">We Value Your Feedback</h2>
           <p className="text-xl text-gray-600 text-center mb-8 max-w-3xl mx-auto">
             Your input helps us continuously improve our service. 
-            Advisors can submit feedback and tickets through our internal system.
+            Students can submit feedback through our feedback form to help enhance the chatbot experience.
           </p>
-          <div className="bg-amber-50 border-2 border-amber-300 rounded-2xl p-8 mb-8 max-w-2xl mx-auto shadow-lg">
-            <div className="flex items-center justify-center mb-4">
-              <span className="text-2xl mr-2">⚠️</span>
-              <span className="font-bold text-amber-800 text-lg">Important Note</span>
-            </div>
-            <p className="text-amber-800 text-center font-medium">
-              The feedback system is only accessible to internal staff. 
-              Students won&apos;t be able to change ticket status.
-            </p>
-          </div>
           <div className="text-center">
             <a
               href="https://northeastern.sharepoint.com/sites/Polinapersonal/SitePages/Advising-Chatbot-Testing-Page.aspx?promotedState=0&source=FromAppBar&Mode=Edit"
@@ -244,7 +159,7 @@ export default function Home() {
               className="inline-flex items-center px-10 py-5 bg-gradient-to-r from-red-600 to-red-700 text-white font-bold text-lg rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 border-2 border-red-500"
             >
               <span className="mr-3">📝</span>
-              Advisor Feedback & Tickets Page (SharePoint)
+              Submit Feedback (SharePoint)
             </a>
           </div>
         </div>
