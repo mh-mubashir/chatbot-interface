@@ -39,8 +39,8 @@ export default function Home() {
           </p>
           <div className="flex justify-center">
             <div className="inline-flex items-center space-x-3 bg-gradient-to-r from-red-600 to-red-700 text-white px-8 py-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-              <Image src="/husky_logo.svg" alt="Husky Bot" width={32} height={32} className="w-8 h-8" />
-              <span className="font-semibold text-lg">Find the Husky to Start Chatting</span>
+              <Image src="/coe_logo.png" alt="COE Bot" width={32} height={32} className="w-8 h-8" />
+              <span className="font-semibold text-lg">Find the COE Bot to Start Chatting</span>
             </div>
           </div>
         </div>
@@ -125,13 +125,13 @@ export default function Home() {
               Where to Access It
             </h2>
             <div className="flex items-center justify-center space-x-6 mb-8">
-              <Image src="/husky_logo.svg" alt="Husky Bot" width={80} height={80} className="w-20 h-20" />
+              <Image src="/coe_logo.png" alt="COE Bot" width={80} height={80} className="w-20 h-20" />
               <div className="text-left">
                 <p className="text-2xl font-semibold mb-2">
-                  Have a question? Find the Husky logo to start chatting!
+                  Have a question? Find the COE Bot logo to start chatting!
                 </p>
                 <p className="text-red-100 text-lg">
-                  Look for the Husky logo in the bottom-right corner of this page.
+                  Look for the COE Bot logo in the bottom-right corner of this page.
                 </p>
               </div>
             </div>

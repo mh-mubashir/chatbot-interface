@@ -67,7 +67,7 @@ const ChatbotWidget: React.FC = () => {
       bubbles.push(
         <div key={`bot-${i}`} className="flex items-start gap-2 mb-3">
           <div className="flex-shrink-0">
-            <Image src="/husky_logo.svg" alt="Husky Bot" width={20} height={20} className="w-5 h-5" />
+            <Image src="/coe_logo.png" alt="COE Bot" width={20} height={20} className="w-5 h-5" />
           </div>
           <div className={`rounded-2xl px-4 py-2 max-w-[75%] shadow ${messageBubbleStyle} break-words`}>
             {formatMessageWithLinks(node.message)}
@@ -101,9 +101,9 @@ const ChatbotWidget: React.FC = () => {
         <button
           className="bg-transparent rounded-full shadow-lg p-4 hover:shadow-xl transition-all focus:outline-none focus:ring-2 focus:ring-red-400 overflow-hidden"
           onClick={() => setOpen(true)}
-          aria-label="Open Husky Bot"
+          aria-label="Open COE Bot"
         >
-          <Image src="/husky_logo.svg" alt="Husky Bot" width={48} height={48} className="w-12 h-12" />
+          <Image src="/coe_logo.png" alt="COE Bot" width={48} height={48} className="w-12 h-12" />
         </button>
       )}
       {/* Chat Window */}
@@ -111,20 +111,20 @@ const ChatbotWidget: React.FC = () => {
         <div className="w-80 max-w-[95vw] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-fade-in border border-gray-200">
           {/* Header - Black background like in the image */}
           <div className="flex items-center justify-between px-4 py-3 bg-black">
-            <div className="flex items-center gap-2">
-              <div className="text-red-600 font-bold text-2xl">N</div>
-              <span className="font-bold text-white text-lg">Northeastern University</span>
+            <div className="flex items-center">
+              <Image src="/neu_white_logo.png" alt="Northeastern University" width={200} height={40} className="h-8 w-auto" />
             </div>
             <div className="flex items-center gap-2">
               {/* Home Button - only show if not at entry */}
               {currentNode.id !== 'entry' && (
                 <button
-                  className="text-white hover:text-red-200 focus:outline-none p-1 rounded-full hover:bg-white/20 transition-colors"
+                  className="flex items-center gap-2 text-white hover:text-red-200 focus:outline-none px-3 py-2 rounded-full hover:bg-white/20 transition-all duration-200 border border-white/30 hover:border-white/50"
                   onClick={goToInitialSelection}
                   aria-label="Return to main menu"
                   title="Return to main menu"
                 >
                   <Home className="w-5 h-5" />
+                  <span className="font-semibold text-sm">Home</span>
                 </button>
               )}
               <button
@@ -142,7 +142,7 @@ const ChatbotWidget: React.FC = () => {
             {/* Current bot message bubble */}
             <div className="flex items-start gap-2 mb-3">
               <div className="flex-shrink-0">
-                <Image src="/husky_logo.svg" alt="Husky Bot" width={20} height={20} className="w-5 h-5" />
+                <Image src="/coe_logo.png" alt="COE Bot" width={20} height={20} className="w-5 h-5" />
               </div>
               <div className={`rounded-2xl px-4 py-2 max-w-[75%] shadow ${messageBubbleStyle} break-words`}>
                 {formatMessageWithLinks(currentNode.message)}
@@ -152,7 +152,7 @@ const ChatbotWidget: React.FC = () => {
             {typing && (
               <div className="flex items-start gap-2 mb-3">
                 <div className="flex-shrink-0">
-                  <Image src="/husky_logo.svg" alt="Husky Bot" width={20} height={20} className="w-5 h-5" />
+                  <Image src="/coe_logo.png" alt="COE Bot" width={20} height={20} className="w-5 h-5" />
                 </div>
                 <div className="rounded-2xl px-4 py-2 max-w-[75%] bg-white text-black border border-gray-200 animate-pulse flex items-center gap-1">
                   <span className="inline-block w-2 h-2 bg-black rounded-full animate-bounce mr-1" style={{ animationDelay: '0s' }}></span>
