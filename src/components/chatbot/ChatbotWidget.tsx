@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from 'react';
 import { useChatbotStore } from '../../store/chatbotStore';
-import { chatbotFlow, NodeType } from '../../utils/flows';
+import { chatbotFlow } from '../../utils/flows';
 import { User, Home } from 'lucide-react';
 import Image from 'next/image';
 
