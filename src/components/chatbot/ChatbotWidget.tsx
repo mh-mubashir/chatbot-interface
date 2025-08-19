@@ -99,11 +99,19 @@ const ChatbotWidget: React.FC = () => {
       {/* Floating Button */}
       {!open && (
         <button
-          className="bg-transparent rounded-full shadow-lg p-4 hover:shadow-xl transition-all focus:outline-none focus:ring-2 focus:ring-red-400 overflow-hidden"
+          className="relative bg-white rounded-full shadow-2xl p-4 hover:shadow-3xl transition-all duration-500 focus:outline-none focus:ring-4 focus:ring-red-400 overflow-hidden group animate-pulse"
           onClick={() => setOpen(true)}
           aria-label="Open COE Bot"
+          style={{
+            boxShadow: '0 0 20px rgba(220, 38, 38, 0.3), 0 0 40px rgba(220, 38, 38, 0.2), 0 0 60px rgba(220, 38, 38, 0.1)',
+          }}
         >
-          <Image src="/coe_logo.png" alt="COE Bot" width={48} height={48} className="w-12 h-12" />
+          {/* Shine effect overlay */}
+          <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          {/* Pulsing ring effect */}
+          <div className="absolute inset-0 rounded-full border-2 border-red-500 animate-ping opacity-20"></div>
+          <div className="absolute inset-2 rounded-full border border-red-400 animate-pulse opacity-30"></div>
+          <Image src="/coe_logo.png" alt="COE Bot" width={48} height={48} className="w-12 h-12 relative z-10" />
         </button>
       )}
       {/* Chat Window */}
