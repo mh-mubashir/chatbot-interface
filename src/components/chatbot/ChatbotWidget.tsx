@@ -116,27 +116,27 @@ const ChatbotWidget: React.FC = () => {
       )}
       {/* Chat Window */}
       {open && (
-        <div className="w-80 max-w-[95vw] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-fade-in border border-gray-200">
+        <div className="w-96 max-w-[95vw] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-fade-in border border-gray-200">
           {/* Header - Black background like in the image */}
-          <div className="flex items-center justify-between px-4 py-3 bg-black">
+          <div className="flex items-center justify-between px-6 py-4 bg-black">
             <div className="flex items-center">
-              <Image src="/neu_white_logo.png" alt="Northeastern University" width={200} height={40} className="h-8 w-auto" />
+              <Image src="/neu_white_logo.png" alt="Northeastern University" width={250} height={50} className="h-10 w-auto" />
             </div>
             <div className="flex items-center gap-2">
               {/* Home Button - only show if not at entry */}
               {currentNode.id !== 'entry' && (
                 <button
-                  className="flex items-center gap-2 text-white hover:text-red-200 focus:outline-none px-3 py-2 rounded-full hover:bg-white/20 transition-all duration-200 border border-white/30 hover:border-white/50"
+                  className="flex items-center gap-2 text-white hover:text-red-200 focus:outline-none px-4 py-2 rounded-full hover:bg-white/20 transition-all duration-200 border border-white/30 hover:border-white/50"
                   onClick={goToInitialSelection}
                   aria-label="Return to main menu"
                   title="Return to main menu"
                 >
-                  <Home className="w-5 h-5" />
-                  <span className="font-semibold text-sm">Home</span>
+                  <Home className="w-6 h-6" />
+                  <span className="font-semibold text-base">Home</span>
                 </button>
               )}
               <button
-                className="text-white hover:text-red-200 focus:outline-none text-xl font-bold"
+                className="text-white hover:text-red-200 focus:outline-none text-2xl font-bold"
                 onClick={() => setOpen(false)}
                 aria-label="Close Chatbot"
               >
