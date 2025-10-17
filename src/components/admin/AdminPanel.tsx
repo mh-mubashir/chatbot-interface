@@ -21,8 +21,10 @@ export default function AdminPanel() {
   const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState<FlowType>('undergraduate');
   
-  // Initialize with initial flow, then load from localStorage in useEffect
+  // Initialize with initial flow, then load from API in useEffect
   const [flow, setFlow] = useState<Record<string, FlowNode>>({ ...initialFlow });
+  const [dataSource, setDataSource] = useState<'supabase' | 'hardcoded'>('hardcoded');
+  const [isLoading, setIsLoading] = useState(false);
   
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>('entry');
   const [editNode, setEditNode] = useState<FlowNode | null>(initialFlow['entry']);
@@ -33,18 +35,45 @@ export default function AdminPanel() {
 
   useEffect(() => setMounted(true), []);
 
-  // Load flow from localStorage after component mounts
+  // Load flow from API after component mounts
   useEffect(() => {
-    const savedFlow = localStorage.getItem('chatbot-flow');
-    if (savedFlow) {
+    const loadFlowData = async () => {
+      setIsLoading(true);
       try {
-        const parsedFlow = JSON.parse(savedFlow);
-        setFlow(parsedFlow);
-        console.log('Loaded saved flow from localStorage');
-      } catch {
-        console.log('Failed to parse saved flow, using initial flow');
+        console.log('🔄 Admin: Fetching chatbot flow data from API...');
+        const response = await fetch('/api/chatbot/nodes');
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const result = await response.json();
+        
+        if (result.success && result.data) {
+          const source = result.source || 'supabase';
+          
+          if (source === 'supabase') {
+            console.log('✅ Admin: Flow data loaded from SUPABASE');
+          } else {
+            console.log('⚠️ Admin: Flow data loaded from HARDCODED FLOWS (fallback)');
+          }
+          
+          setFlow(result.data);
+          setDataSource(source);
+        } else {
+          throw new Error(result.error || 'Failed to load flow data');
+        }
+      } catch (error: any) {
+        console.error('❌ Admin: Error loading flow data, using hardcoded flows:', error);
+        console.log('⚠️ Admin: Flow data loaded from HARDCODED FLOWS (error fallback)');
+        setFlow(initialFlow);
+        setDataSource('hardcoded');
+      } finally {
+        setIsLoading(false);
       }
-    }
+    };
+    
+    loadFlowData();
   }, []);
 
   // Update editNode when selectedNodeId changes
@@ -170,132 +199,270 @@ export default function AdminPanel() {
   };
 
   // Save node edits
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!editNode) {
       console.log('No editNode to save');
       return;
     }
     
-    console.log('Saving node:', editNode);
-    console.log('Current flow before save:', flow);
+    console.log('💾 Saving node to API:', editNode);
     
-    // Create a new flow object with the updated node
-    const updatedFlow = {
-      ...flow,
-      [editNode.id]: {
-        id: editNode.id,
-        type: editNode.type,
-        message: editNode.message,
-        options: editNode.options || []
+    try {
+      // Determine flow type for the node
+      const determineFlowType = (nodeId: string): 'undergraduate' | 'graduate' | 'shared' => {
+        if (nodeId.startsWith('grad_')) return 'graduate';
+        if (nodeId.startsWith('undergrad_')) return 'undergraduate';
+        return 'shared';
+      };
+
+      const response = await fetch(`/api/chatbot/nodes/${editNode.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          type: editNode.type,
+          message: editNode.message,
+          options: editNode.options || [],
+          flow_type: determineFlowType(editNode.id)
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to save node');
       }
-    };
-    
-    console.log('Updated flow after save:', updatedFlow);
-    
-    // Update the flow state
-    setFlow(updatedFlow);
-    
-    // Save to localStorage for persistence
-    if (mounted) {
-      localStorage.setItem('chatbot-flow', JSON.stringify(updatedFlow));
-      console.log('Flow saved to localStorage');
+
+      console.log('✅ Node saved to Supabase:', editNode.id);
+      
+      // Update local state
+      const updatedFlow = {
+        ...flow,
+        [editNode.id]: {
+          id: editNode.id,
+          type: editNode.type,
+          message: editNode.message,
+          options: editNode.options || []
+        }
+      };
+      
+      setFlow(updatedFlow);
+      setSelectedNodeId(editNode.id);
+      setHasUnsavedChanges(false);
+      alert(`✅ Node "${editNode.id}" saved successfully to database!`);
+      
+    } catch (error: any) {
+      console.error('❌ Error saving node:', error);
+      alert(`❌ Error saving node: ${error.message}\n\nPlease check your Supabase configuration.`);
     }
-    
-    // Force a re-render by updating the selected node
-    setSelectedNodeId(editNode.id);
-    
-    // Show success message
-    setHasUnsavedChanges(false);
-    alert(`Node "${editNode.id}" saved successfully!`);
   };
 
   // Add new node
-  const handleAddNode = () => {
+  const handleAddNode = async () => {
     if (!newNode.id || !newNode.type || !newNode.message) return;
-    const updatedFlow = {
-      ...flow,
-      [newNode.id]: {
-        id: newNode.id,
-        type: newNode.type as NodeType,
-        message: newNode.message,
-        options: [],
-      },
-    };
-    setFlow(updatedFlow);
     
-    // Save to localStorage
-    if (mounted) {
-      localStorage.setItem('chatbot-flow', JSON.stringify(updatedFlow));
+    console.log('➕ Adding new node to API:', newNode);
+    
+    try {
+      const determineFlowType = (nodeId: string): 'undergraduate' | 'graduate' | 'shared' => {
+        if (nodeId.startsWith('grad_')) return 'graduate';
+        if (nodeId.startsWith('undergrad_')) return 'undergraduate';
+        return 'shared';
+      };
+
+      const response = await fetch('/api/chatbot/nodes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: newNode.id,
+          type: newNode.type,
+          message: newNode.message,
+          options: [],
+          flow_type: determineFlowType(newNode.id)
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to create node');
+      }
+
+      console.log('✅ Node created in Supabase:', newNode.id);
+      
+      // Update local state
+      const updatedFlow = {
+        ...flow,
+        [newNode.id]: {
+          id: newNode.id,
+          type: newNode.type as NodeType,
+          message: newNode.message,
+          options: [],
+        },
+      };
+      
+      setFlow(updatedFlow);
+      setNewNode({ type: 'category' });
+      setShowAdd(false);
+      alert(`✅ Node "${newNode.id}" created successfully!`);
+      
+    } catch (error: any) {
+      console.error('❌ Error creating node:', error);
+      alert(`❌ Error creating node: ${error.message}`);
     }
-    
-    setNewNode({ type: 'category' });
-    setShowAdd(false);
   };
 
   // Delete node
-  const handleDeleteNode = (nodeId: string) => {
-    if (!window.confirm('Delete this node?')) return;
-    const newFlow = { ...flow };
-    delete newFlow[nodeId];
-    // Remove options pointing to this node
-    Object.keys(newFlow).forEach(nid => {
-      newFlow[nid].options = newFlow[nid].options?.filter(opt => opt.next !== nodeId);
-    });
-    setFlow(newFlow);
+  const handleDeleteNode = async (nodeId: string) => {
+    if (!window.confirm(`⚠️ Delete node "${nodeId}"?\n\nThis will also remove all references to this node from other nodes' options.`)) return;
     
-    // Save to localStorage
-    if (mounted) {
-      localStorage.setItem('chatbot-flow', JSON.stringify(newFlow));
+    console.log('🗑️ Deleting node from API:', nodeId);
+    
+    try {
+      const response = await fetch(`/api/chatbot/nodes/${nodeId}`, {
+        method: 'DELETE',
+      });
+
+      const result = await response.json();
+
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to delete node');
+      }
+
+      console.log('✅ Node deleted from Supabase:', nodeId);
+      if (result.message) {
+        console.log('🧹', result.message);
+      }
+      
+      // Update local state - the API already cleaned up references in Supabase
+      const newFlow = { ...flow };
+      delete newFlow[nodeId];
+      
+      // Also clean up local state references
+      Object.keys(newFlow).forEach(nid => {
+        if (newFlow[nid].options) {
+          newFlow[nid].options = newFlow[nid].options.filter(opt => opt.next !== nodeId);
+        }
+      });
+      
+      setFlow(newFlow);
+      setSelectedNodeId('entry');
+      setEditNode(newFlow['entry'] ? { ...newFlow['entry'] } : null);
+      alert(`✅ Node "${nodeId}" deleted successfully!\n\n${result.message || 'References cleaned up.'}`);
+      
+    } catch (error: any) {
+      console.error('❌ Error deleting node:', error);
+      alert(`❌ Error deleting node: ${error.message}`);
     }
-    
-    setSelectedNodeId('entry');
-    setEditNode({ ...newFlow['entry'] });
   };
 
   // Add option to node
-  const handleAddOption = (label: string, next: string) => {
+  const handleAddOption = async (label: string, next: string) => {
     if (!editNode) return;
+    
     const updated = {
       ...editNode,
       options: [...(editNode.options || []), { label, next }],
     };
-    setEditNode(updated);
-    const updatedFlow = { ...flow, [editNode.id]: updated };
-    setFlow(updatedFlow);
     
-    // Save to localStorage
-    if (mounted) {
-      localStorage.setItem('chatbot-flow', JSON.stringify(updatedFlow));
+    // Save to API
+    try {
+      const determineFlowType = (nodeId: string): 'undergraduate' | 'graduate' | 'shared' => {
+        if (nodeId.startsWith('grad_')) return 'graduate';
+        if (nodeId.startsWith('undergrad_')) return 'undergraduate';
+        return 'shared';
+      };
+
+      const response = await fetch(`/api/chatbot/nodes/${editNode.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          type: updated.type,
+          message: updated.message,
+          options: updated.options,
+          flow_type: determineFlowType(editNode.id)
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to update node');
+      }
+
+      console.log('✅ Option added to node:', editNode.id);
+      
+      setEditNode(updated);
+      const updatedFlow = { ...flow, [editNode.id]: updated };
+      setFlow(updatedFlow);
+      
+    } catch (error: any) {
+      console.error('❌ Error adding option:', error);
+      alert(`❌ Error adding option: ${error.message}`);
     }
   };
 
   // Remove option from node
-  const handleRemoveOption = (idx: number) => {
+  const handleRemoveOption = async (idx: number) => {
     if (!editNode) return;
+    
     const updated = {
       ...editNode,
       options: (editNode.options || []).filter((_, i) => i !== idx),
     };
-    setEditNode(updated);
-    const updatedFlow = { ...flow, [editNode.id]: updated };
-    setFlow(updatedFlow);
     
-    // Save to localStorage
-    if (mounted) {
-      localStorage.setItem('chatbot-flow', JSON.stringify(updatedFlow));
+    // Save to API
+    try {
+      const determineFlowType = (nodeId: string): 'undergraduate' | 'graduate' | 'shared' => {
+        if (nodeId.startsWith('grad_')) return 'graduate';
+        if (nodeId.startsWith('undergrad_')) return 'undergraduate';
+        return 'shared';
+      };
+
+      const response = await fetch(`/api/chatbot/nodes/${editNode.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          type: updated.type,
+          message: updated.message,
+          options: updated.options,
+          flow_type: determineFlowType(editNode.id)
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to update node');
+      }
+
+      console.log('✅ Option removed from node:', editNode.id);
+      
+      setEditNode(updated);
+      const updatedFlow = { ...flow, [editNode.id]: updated };
+      setFlow(updatedFlow);
+      
+    } catch (error: any) {
+      console.error('❌ Error removing option:', error);
+      alert(`❌ Error removing option: ${error.message}`);
     }
   };
 
-  // Reset flow to original
+  // Reset flow to original - Warning: This doesn't reset Supabase, just local state
   const handleResetFlow = () => {
-    if (!window.confirm('Reset flow to original? This will lose all changes.')) return;
+    if (!window.confirm('⚠️ This will reset the LOCAL view to original hardcoded flows.\n\nThis does NOT reset the database. To fully reset, you need to re-run the migration script.\n\nContinue?')) return;
     setFlow({ ...initialFlow });
-    if (mounted) {
-      localStorage.removeItem('chatbot-flow');
-    }
     setSelectedNodeId('entry');
     setEditNode({ ...initialFlow['entry'] });
-    alert('Flow reset to original!');
+    setDataSource('hardcoded');
+    alert('⚠️ Local view reset to original! Database unchanged.');
   };
 
   // Export flow data
@@ -376,9 +543,13 @@ export default function AdminPanel() {
           
           {/* Status indicator */}
           <div className="text-sm text-gray-600">
-            {mounted && localStorage.getItem('chatbot-flow') 
-              ? '🟢 Using saved flow data (changes persist across reloads)' 
-              : '🟡 Using original flow data (changes will be lost on reload)'}
+            {isLoading ? (
+              <span>⏳ Loading flow data...</span>
+            ) : dataSource === 'supabase' ? (
+              <span className="text-green-600 font-semibold">✅ Connected to SUPABASE - All changes are saved to database</span>
+            ) : (
+              <span className="text-orange-600 font-semibold">⚠️ Using HARDCODED FLOWS - Supabase not configured or unavailable</span>
+            )}
           </div>
         </div>
 
