@@ -1,6 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase, ChatbotNodeDB, isSupabaseConfigured } from '@/lib/supabase';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { chatbotFlow } from '@/utils/flows';
+
+interface ChatbotNodeDB {
+  id: string;
+  type: string;
+  message: string;
+  options: { label: string; next: string }[] | null;
+  flow_type: 'undergraduate' | 'graduate' | 'shared';
+}
 
 // GET /api/chatbot/nodes - Fetch all nodes
 export async function GET(request: NextRequest) {
@@ -40,12 +48,12 @@ export async function GET(request: NextRequest) {
     const flowData = (data as ChatbotNodeDB[]).reduce((acc, node) => {
       acc[node.id] = {
         id: node.id,
-        type: node.type as any,
+        type: node.type,
         message: node.message,
         options: node.options || []
       };
       return acc;
-    }, {} as Record<string, any>);
+    }, {} as Record<string, { id: string; type: string; message: string; options: { label: string; next: string }[] }>);
 
     console.log('✅ Successfully fetched nodes from Supabase:', Object.keys(flowData).length, 'nodes');
 
@@ -54,13 +62,13 @@ export async function GET(request: NextRequest) {
       data: flowData,
       source: 'supabase'
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error('❌ API error, falling back to hardcoded flows:', error);
     return NextResponse.json({ 
       success: true, 
       data: chatbotFlow,
       source: 'hardcoded',
-      error: error.message
+      error: error instanceof Error ? error.message : 'Unknown error'
     });
   }
 }
@@ -111,11 +119,11 @@ export async function POST(request: NextRequest) {
       success: true, 
       data 
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error('❌ API error:', error);
     return NextResponse.json({ 
       success: false, 
-      error: error.message 
+      error: error instanceof Error ? error.message : 'Unknown error'
     }, { status: 500 });
   }
 }

@@ -58,7 +58,7 @@ export const useChatbotStore = create<ChatbotState>((set, get) => ({
       } else {
         throw new Error(result.error || 'Failed to load flow data');
       }
-    } catch (error: any) {
+    } catch (error) {
       console.error('❌ Error loading flow data, using hardcoded flows:', error);
       console.log('⚠️ Chatbot data loaded from HARDCODED FLOWS (error fallback)');
       
@@ -67,7 +67,7 @@ export const useChatbotStore = create<ChatbotState>((set, get) => ({
         dataSource: 'hardcoded',
         currentNode: chatbotFlow.entry,
         isLoading: false,
-        error: error.message 
+        error: error instanceof Error ? error.message : 'Unknown error' 
       });
     }
   },

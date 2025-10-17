@@ -63,7 +63,7 @@ export default function AdminPanel() {
         } else {
           throw new Error(result.error || 'Failed to load flow data');
         }
-      } catch (error: any) {
+      } catch (error) {
         console.error('❌ Admin: Error loading flow data, using hardcoded flows:', error);
         console.log('⚠️ Admin: Flow data loaded from HARDCODED FLOWS (error fallback)');
         setFlow(initialFlow);
@@ -300,9 +300,9 @@ export default function AdminPanel() {
       setHasUnsavedChanges(false);
       alert(`✅ Node "${editNode.id}" saved successfully to database!`);
       
-    } catch (error: any) {
+    } catch (error) {
       console.error('❌ Error saving node:', error);
-      alert(`❌ Error saving node: ${error.message}\n\nPlease check your Supabase configuration.`);
+      alert(`❌ Error saving node: ${error instanceof Error ? error.message : 'Unknown error'}\n\nPlease check your Supabase configuration.`);
     }
   };
 
@@ -357,9 +357,9 @@ export default function AdminPanel() {
       setShowAdd(false);
       alert(`✅ Node "${newNode.id}" created successfully!`);
       
-    } catch (error: any) {
+    } catch (error) {
       console.error('❌ Error creating node:', error);
-      alert(`❌ Error creating node: ${error.message}`);
+      alert(`❌ Error creating node: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   };
 
@@ -401,9 +401,9 @@ export default function AdminPanel() {
       setEditNode(newFlow['entry'] ? { ...newFlow['entry'] } : null);
       alert(`✅ Node "${nodeId}" deleted successfully!\n\n${result.message || 'References cleaned up.'}`);
       
-    } catch (error: any) {
+    } catch (error) {
       console.error('❌ Error deleting node:', error);
-      alert(`❌ Error deleting node: ${error.message}`);
+      alert(`❌ Error deleting node: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   };
 
@@ -449,9 +449,9 @@ export default function AdminPanel() {
       const updatedFlow = { ...flow, [editNode.id]: updated };
       setFlow(updatedFlow);
       
-    } catch (error: any) {
+    } catch (error) {
       console.error('❌ Error adding option:', error);
-      alert(`❌ Error adding option: ${error.message}`);
+      alert(`❌ Error adding option: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   };
 
@@ -497,9 +497,9 @@ export default function AdminPanel() {
       const updatedFlow = { ...flow, [editNode.id]: updated };
       setFlow(updatedFlow);
       
-    } catch (error: any) {
+    } catch (error) {
       console.error('❌ Error removing option:', error);
-      alert(`❌ Error removing option: ${error.message}`);
+      alert(`❌ Error removing option: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   };
 

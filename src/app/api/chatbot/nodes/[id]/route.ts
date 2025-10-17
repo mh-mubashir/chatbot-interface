@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase, ChatbotNodeDB, isSupabaseConfigured } from '@/lib/supabase';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 
 // GET /api/chatbot/nodes/[id] - Fetch single node
 export async function GET(
@@ -26,7 +26,7 @@ export async function GET(
       console.error('❌ Error fetching node:', error);
       return NextResponse.json({ 
         success: false, 
-        error: error.message 
+        error: error instanceof Error ? error.message : 'Unknown error' 
       }, { status: 404 });
     }
 
@@ -34,11 +34,11 @@ export async function GET(
       success: true, 
       data 
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error('❌ API error:', error);
     return NextResponse.json({ 
       success: false, 
-      error: error.message 
+      error: error instanceof Error ? error.message : 'Unknown error' 
     }, { status: 500 });
   }
 }
@@ -92,7 +92,7 @@ export async function PUT(
     }
 
     // Update the node
-    const updateData: any = {
+    const updateData: Record<string, unknown> = {
       updated_at: new Date().toISOString()
     };
 
@@ -112,7 +112,7 @@ export async function PUT(
       console.error('❌ Error updating node:', error);
       return NextResponse.json({ 
         success: false, 
-        error: error.message 
+        error: error instanceof Error ? error.message : 'Unknown error' 
       }, { status: 500 });
     }
 
@@ -122,11 +122,11 @@ export async function PUT(
       success: true, 
       data 
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error('❌ API error:', error);
     return NextResponse.json({ 
       success: false, 
-      error: error.message 
+      error: error instanceof Error ? error.message : 'Unknown error' 
     }, { status: 500 });
   }
 }
@@ -161,13 +161,13 @@ export async function DELETE(
 
     // Step 2: Remove references to the deleted node from other nodes' options
     if (allNodes) {
-      const nodesToUpdate: any[] = [];
+      const nodesToUpdate: Array<{ id: string; options: { label: string; next: string }[] }> = [];
       
       for (const node of allNodes) {
         if (node.options && Array.isArray(node.options)) {
           // Filter out options that point to the node being deleted
           const updatedOptions = node.options.filter(
-            (opt: any) => opt.next !== id
+            (opt: { label: string; next: string }) => opt.next !== id
           );
           
           // If options changed, add to update list
@@ -222,11 +222,11 @@ export async function DELETE(
       success: true,
       message: `Node deleted and cleaned up references from other nodes`
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error('❌ API error:', error);
     return NextResponse.json({ 
       success: false, 
-      error: error.message 
+      error: error instanceof Error ? error.message : 'Unknown error' 
     }, { status: 500 });
   }
 }

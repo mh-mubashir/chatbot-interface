@@ -33,7 +33,7 @@ export interface ChatbotNodeHistoryDB {
 export function dbNodeToFlowNode(dbNode: ChatbotNodeDB): FlowNode {
   return {
     id: dbNode.id,
-    type: dbNode.type as any,
+    type: dbNode.type as FlowNode['type'],
     message: dbNode.message,
     options: dbNode.options || []
   };

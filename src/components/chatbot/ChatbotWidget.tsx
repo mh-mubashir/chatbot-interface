@@ -11,7 +11,7 @@ const optionButtonStyle = 'bg-white text-black border-2 border-black hover:bg-bl
 
 const ChatbotWidget: React.FC = () => {
   const [open, setOpen] = useState(false);
-  const { currentNode, history, goToNode, goBack, reset, loadFlowData, dataSource, isLoading } = useChatbotStore();
+  const { currentNode, history, goToNode, goBack, reset, loadFlowData } = useChatbotStore();
   const [typing, setTyping] = useState(false);
   const chatEndRef = React.useRef<HTMLDivElement>(null);
 

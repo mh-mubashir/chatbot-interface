@@ -26,7 +26,7 @@ export async function GET(
       console.error('❌ Error fetching history:', error);
       return NextResponse.json({ 
         success: false, 
-        error: error.message 
+        error: error instanceof Error ? error.message : 'Unknown error' 
       }, { status: 500 });
     }
 
@@ -36,11 +36,11 @@ export async function GET(
       success: true, 
       data 
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error('❌ API error:', error);
     return NextResponse.json({ 
       success: false, 
-      error: error.message 
+      error: error instanceof Error ? error.message : 'Unknown error' 
     }, { status: 500 });
   }
 }
