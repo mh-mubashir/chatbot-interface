@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useChatbotStore } from '../../store/chatbotStore';
 import { chatbotFlow } from '../../utils/flows';
-import { User, Home } from 'lucide-react';
+import { User, Home, ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
 
 // Unified color scheme - no multiple colors for different node types
@@ -12,7 +12,7 @@ const optionButtonStyle = 'bg-white text-black border-2 border-black hover:bg-bl
 
 const ChatbotWidget: React.FC = () => {
   const [open, setOpen] = useState(false);
-  const { currentNode, history, goToNode, reset } = useChatbotStore();
+  const { currentNode, history, goToNode, goBack, reset } = useChatbotStore();
   const [typing, setTyping] = useState(false);
   const chatEndRef = React.useRef<HTMLDivElement>(null);
 
@@ -179,6 +179,16 @@ const ChatbotWidget: React.FC = () => {
           </div>
           {/* Sticky Options Bar - Light gray background like in the image */}
           <div className="px-4 py-3 border-t bg-gray-100 flex flex-col gap-2 sticky bottom-0">
+            {/* Back Button - Show when there's history */}
+            {history.length > 0 && (
+              <button
+                className="rounded-full px-4 py-2 font-semibold shadow focus:outline-none focus:ring-2 focus:ring-gray-400 transition-all bg-gray-200 text-gray-700 hover:bg-gray-300 border border-gray-300 flex items-center justify-center gap-2"
+                onClick={goBack}
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Back
+              </button>
+            )}
             {currentNode.options && currentNode.options.length > 0 && (
               <div className="flex flex-col gap-2">
                 {currentNode.options.map((opt) => (
