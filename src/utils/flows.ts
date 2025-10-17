@@ -360,7 +360,7 @@ Please note: In a case where a course is offered that is not 4SH, please contact
     message: "I'm sorry this didn't solve your problem. Would you like to:",
     options: [
       { label: "Try a different option", next: "grad_under_dev" },
-      { label: "Contact support directly", next: "contact_support" }
+      { label: "Contact support directly", next: "grad_contact_support" }
     ]
   },
   grad_satisfaction_more_help: {
@@ -369,7 +369,7 @@ Please note: In a case where a course is offered that is not 4SH, please contact
     message: "Would you like to explore other options or contact support?",
     options: [
       { label: "Explore other options", next: "grad_under_dev" },
-      { label: "Contact support", next: "contact_support" }
+      { label: "Contact support", next: "grad_contact_support" }
     ]
   },
   undergrad_main: {
@@ -660,7 +660,13 @@ Please note: In a case where a course is offered that is not 4SH, please contact
   contact_support: {
     id: "contact_support",
     type: "end",
-    message: "Please contact [support contact information].",
+    message: "Please send an email to COEAdvising@northeastern.edu for assistance.",
+    options: [{ label: "End", next: "end" }]
+  },
+  grad_contact_support: {
+    id: "grad_contact_support",
+    type: "end",
+    message: "Please send an email to coe-gradadvising@northeastern.edu for assistance.",
     options: [{ label: "End", next: "end" }]
   },
   end: {
