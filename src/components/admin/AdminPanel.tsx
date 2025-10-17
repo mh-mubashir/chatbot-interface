@@ -15,7 +15,7 @@ const nodeTypes: NodeType[] = [
   'entry', 'category', 'sub_option', 'response', 'end'
 ];
 
-type FlowType = 'undergraduate' | 'graduate';
+type FlowType = 'undergraduate' | 'graduate' | 'shared';
 
 export default function AdminPanel() {
   const [mounted, setMounted] = useState(false);
@@ -120,7 +120,7 @@ export default function AdminPanel() {
       
       addReachableNodes('undergrad_main');
       return nodeList.filter(node => undergradNodes.has(node.id) && node.type !== 'satisfaction');
-    } else {
+    } else if (flowType === 'graduate') {
       // For graduate, only show nodes that are part of grad_under_dev flow
       const gradNodes = new Set(['grad_under_dev']);
       
@@ -139,6 +139,51 @@ export default function AdminPanel() {
       
       addReachableNodes('grad_under_dev');
       return nodeList.filter(node => gradNodes.has(node.id) && node.type !== 'satisfaction');
+    } else {
+      // For shared, show entry node and all shared/end nodes
+      // Also show nodes that are directly attached to entry but not part of undergrad/grad flows
+      const sharedNodes = new Set(['entry']);
+      
+      // Get all nodes reachable from undergrad and grad to exclude them
+      const undergradNodes = new Set(['undergrad_main']);
+      const gradNodes = new Set(['grad_under_dev']);
+      
+      const addReachableNodes = (nodeId: string, targetSet: Set<string>) => {
+        const node = flow[nodeId];
+        if (node && node.options) {
+          node.options.forEach(option => {
+            if (option.next && option.next !== 'entry' && option.next !== 'satisfaction') {
+              targetSet.add(option.next);
+              addReachableNodes(option.next, targetSet);
+            }
+          });
+        }
+      };
+      
+      addReachableNodes('undergrad_main', undergradNodes);
+      addReachableNodes('grad_under_dev', gradNodes);
+      
+      // Add nodes directly connected to entry
+      const entryNode = flow['entry'];
+      if (entryNode && entryNode.options) {
+        entryNode.options.forEach(option => {
+          if (option.next && !undergradNodes.has(option.next) && !gradNodes.has(option.next)) {
+            sharedNodes.add(option.next);
+          }
+        });
+      }
+      
+      // Add satisfaction, end, and contact support nodes
+      nodeList.forEach(node => {
+        if (node.type === 'satisfaction' || 
+            node.type === 'end' || 
+            node.id === 'contact_support' || 
+            node.id === 'grad_contact_support') {
+          sharedNodes.add(node.id);
+        }
+      });
+      
+      return nodeList.filter(node => sharedNodes.has(node.id));
     }
   };
 
@@ -193,8 +238,11 @@ export default function AdminPanel() {
     // Otherwise show the full tree for the active tab
     if (activeTab === 'undergraduate') {
       return renderTree('undergrad_main');
-    } else {
+    } else if (activeTab === 'graduate') {
       return renderTree('grad_under_dev');
+    } else {
+      // For shared tab, start from entry node
+      return renderTree('entry');
     }
   };
 
@@ -577,6 +625,16 @@ export default function AdminPanel() {
               >
                 Graduate Flow
               </button>
+              <button
+                onClick={() => setActiveTab('shared')}
+                className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                  activeTab === 'shared'
+                    ? 'border-red-500 text-red-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+              >
+                Entry & Shared Nodes
+              </button>
             </nav>
           </div>
         </div>
@@ -587,7 +645,7 @@ export default function AdminPanel() {
             <div className="bg-white rounded-lg shadow-sm p-6">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-xl font-semibold text-gray-900">
-                  {activeTab === 'undergraduate' ? 'Undergraduate' : 'Graduate'} Flow Tree
+                  {activeTab === 'undergraduate' ? 'Undergraduate' : activeTab === 'graduate' ? 'Graduate' : 'Entry & Shared'} Flow Tree
                 </h2>
                 <button
                   className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
