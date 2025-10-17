@@ -45,7 +45,7 @@ export const chatbotFlow: Record<string, FlowNode> = {
   grad_graduation_info: {
     id: "grad_graduation_info",
     type: "response",
-    message: "Any questions you may have regarding applying to graduate, your diploma, ceremony information, deadlines, parking, accessible seating, tickets, and regalia can be found on the official Northeastern Commencement website FAQ page. [Home - Northeastern Commencement](https://commencement.northeastern.edu/)<br><br>Find out everything you need to do in the months, weeks, and days leading up to graduation—and tips for the day itself. If you have any remaining questions, please reach out to your academic advisor.",
+    message: "Any questions you may have regarding applying to graduate, your diploma, ceremony information, deadlines, parking, accessible seating, tickets, and regalia can be found on the official Northeastern Commencement website FAQ page. [Home - Northeastern Commencement](https://commencement.northeastern.edu/)\n\nFind out everything you need to do in the months, weeks, and days leading up to graduation—and tips for the day itself. If you have any remaining questions, please reach out to your academic advisor.",
     options: [{ label: "Continue", next: "grad_satisfaction" }]
   },
   // --- GRADUATE STUDENT EMPLOYMENT ---
@@ -121,13 +121,13 @@ export const chatbotFlow: Record<string, FlowNode> = {
   grad_phd_faculty_advisor: {
     id: "grad_phd_faculty_advisor",
     type: "response",
-    message: "If you are a new student, a PhD Faculty Advisor was assigned to you at the time of admission. Please refer to your admissions letter to find the name of your PhD Faculty Advisor. If you have any further questions, feel free to contact your [Program Contact](https://coe.northeastern.edu/academics-experiential-learning/graduate-school-of-engineering/graduate-student-services/) or email {gradadvising@northeastern.edu}.<br><br>If you are a continuing student and are not currently working with a PhD Faculty Advisor, please reach out to your Program Contact or email coe-phd-{gradadvising@northeastern.edu} for assistance.",
+    message: "If you are a new student, a PhD Faculty Advisor was assigned to you at the time of admission. Please refer to your admissions letter to find the name of your PhD Faculty Advisor. If you have any further questions, feel free to contact your [Program Contact](https://coe.northeastern.edu/academics-experiential-learning/graduate-school-of-engineering/graduate-student-services/) or email {gradadvising@northeastern.edu}.\n\nIf you are a continuing student and are not currently working with a PhD Faculty Advisor, please reach out to your Program Contact or email coe-phd-{gradadvising@northeastern.edu} for assistance.",
     options: [{ label: "Continue", next: "grad_satisfaction" }]
   },
   grad_academic_advisor_who: {
     id: "grad_academic_advisor_who",
     type: "response",
-    message: "Academic advisor are assigned to new students following the end of the add/drop period. If you are a continuing students you should see your advisor on your student hub. If you are a new student or do not see your advisor in your Student Hub, please reach out to {CoE-GradAdvising@northeastern.edu}.<br><br>You may also want to attend our [virtual office hours](Virtual Drop-In Advising link.) to meet with an advisor or schedule a 20 minute virtual or in-person appointment to meet with an academic advisor via [Navigate](https://northeastern.campus.eab.com/). ([See Navigate Instructions](https://coe.northeastern.edu/wp-content/uploads/pdfs/coe/gse/navigate-instructions.pdf)).",
+    message: "Academic advisor are assigned to new students following the end of the add/drop period. If you are a continuing students you should see your advisor on your student hub. If you are a new student or do not see your advisor in your Student Hub, please reach out to {CoE-GradAdvising@northeastern.edu}.\n\nYou may also want to attend our [virtual office hours](Virtual Drop-In Advising link.) to meet with an advisor or schedule a 20 minute virtual or in-person appointment to meet with an academic advisor via [Navigate](https://northeastern.campus.eab.com/). ([See Navigate Instructions](https://coe.northeastern.edu/wp-content/uploads/pdfs/coe/gse/navigate-instructions.pdf)).",
     options: [ { label: "Are you a student on the Boston campus or a campus outside of Boston?", next: "grad_boston_or_not" }, { label: "Continue", next: "grad_satisfaction" } ]
   },
   grad_program_contact: {
@@ -313,7 +313,7 @@ Please note: In a case where a course is offered that is not 4SH, please contact
   grad_international_requirements: {
     id: "grad_international_requirements",
     type: "response",
-    message: "You must be enrolled as a full-time graduate student, enrolled in 8 semester credit hours (4 semester credit hours of which must be on-ground), to comply with a J1 or F1 Visa or Study Permit. See OGS information on [maintaining status](https://international.northeastern.edu/ogs/current-students/understanding-visa-requirements/guidelines-on-maintaining-status/).<br><br>If you are in your last semester and have one course to complete your degree requirements, you must enroll in 4 semester credit hours on-ground. See OGS information on the [final term](https://international.northeastern.edu/ogs/current-students/understanding-visa-requirements/final-term/).",
+    message: "You must be enrolled as a full-time graduate student, enrolled in 8 semester credit hours (4 semester credit hours of which must be on-ground), to comply with a J1 or F1 Visa or Study Permit. See OGS information on [maintaining status](https://international.northeastern.edu/ogs/current-students/understanding-visa-requirements/guidelines-on-maintaining-status/).\n\nIf you are in your last semester and have one course to complete your degree requirements, you must enroll in 4 semester credit hours on-ground. See OGS information on the [final term](https://international.northeastern.edu/ogs/current-students/understanding-visa-requirements/final-term/).",
     options: [{ label: "Continue", next: "grad_satisfaction" }]
   },
   grad_extra_credits: {
@@ -360,7 +360,7 @@ Please note: In a case where a course is offered that is not 4SH, please contact
     message: "I'm sorry this didn't solve your problem. Would you like to:",
     options: [
       { label: "Try a different option", next: "grad_under_dev" },
-      { label: "Contact support directly", next: "contact_support" }
+      { label: "Contact support directly", next: "grad_contact_support" }
     ]
   },
   grad_satisfaction_more_help: {
@@ -369,7 +369,7 @@ Please note: In a case where a course is offered that is not 4SH, please contact
     message: "Would you like to explore other options or contact support?",
     options: [
       { label: "Explore other options", next: "grad_under_dev" },
-      { label: "Contact support", next: "contact_support" }
+      { label: "Contact support", next: "grad_contact_support" }
     ]
   },
   undergrad_main: {
@@ -660,7 +660,13 @@ Please note: In a case where a course is offered that is not 4SH, please contact
   contact_support: {
     id: "contact_support",
     type: "end",
-    message: "Please contact [support contact information].",
+    message: "Please send an email to COEAdvising@northeastern.edu for assistance.",
+    options: [{ label: "End", next: "end" }]
+  },
+  grad_contact_support: {
+    id: "grad_contact_support",
+    type: "end",
+    message: "Please send an email to coe-gradadvising@northeastern.edu for assistance.",
     options: [{ label: "End", next: "end" }]
   },
   end: {
@@ -694,7 +700,7 @@ Please note: In a case where a course is offered that is not 4SH, please contact
   find_degree_audit: {
     id: "find_degree_audit",
     type: "response",
-    message: "Log into the Student Hub and take one of the following actions:<br>1. Click 'Services & Links' and scroll through the list to find 'My Degree Audit'<br>2. Type 'degree audit' into the search bar.",
+    message: "Log into the Student Hub and take one of the following actions:\n1. Click 'Services & Links' and scroll through the list to find 'My Degree Audit'\n2. Type 'degree audit' into the search bar.",
     options: [{ label: "Continue", next: "satisfaction" }]
   },
   run_degree_audit_different_major: {
