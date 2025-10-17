@@ -33,7 +33,7 @@ const ChatbotWidget: React.FC = () => {
     }
   }, [history, currentNode, open]);
 
-  // Helper to extract and format links from text
+  // Helper to extract and format links from text and handle line breaks
   const formatMessageWithLinks = (message: string) => {
     const urlRegex = /(https?:\/\/[^\s]+)/g;
     const parts = message.split(urlRegex);
@@ -52,7 +52,13 @@ const ChatbotWidget: React.FC = () => {
           </a>
         );
       }
-      return part;
+      // Handle line breaks by splitting on \n and adding <br /> elements
+      return part.split('\n').map((line, i, arr) => (
+        <React.Fragment key={`${index}-${i}`}>
+          {line}
+          {i < arr.length - 1 && <br />}
+        </React.Fragment>
+      ));
     });
   };
 
