@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from 'react';
 import { useChatbotStore } from '../../store/chatbotStore';
-import { chatbotFlow } from '../../utils/flows';
 import { User, Home, ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
 
@@ -12,9 +11,14 @@ const optionButtonStyle = 'bg-white text-black border-2 border-black hover:bg-bl
 
 const ChatbotWidget: React.FC = () => {
   const [open, setOpen] = useState(false);
-  const { currentNode, history, goToNode, goBack, reset } = useChatbotStore();
+  const { currentNode, history, goToNode, goBack, reset, loadFlowData, dataSource, isLoading } = useChatbotStore();
   const [typing, setTyping] = useState(false);
   const chatEndRef = React.useRef<HTMLDivElement>(null);
+
+  // Load flow data from API on mount
+  React.useEffect(() => {
+    loadFlowData();
+  }, [loadFlowData]);
 
   // Simulate typing indicator for bot responses
   React.useEffect(() => {
@@ -64,10 +68,11 @@ const ChatbotWidget: React.FC = () => {
 
   // Helper to get the full conversation history as bubbles
   const renderHistory = () => {
+    const { flowData } = useChatbotStore.getState();
     const bubbles = [];
     for (let i = 0; i < history.length; i++) {
       const item = history[i];
-      const node = chatbotFlow[item.nodeId];
+      const node = flowData[item.nodeId];
       if (!node) continue;
       // Bot message bubble
       bubbles.push(
