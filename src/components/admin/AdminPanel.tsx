@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { chatbotFlow as initialFlow, FlowNode, NodeType } from '../../utils/flows';
 
 const typeColors: Record<NodeType, string> = {
@@ -18,6 +19,7 @@ const nodeTypes: NodeType[] = [
 type FlowType = 'undergraduate' | 'graduate' | 'shared';
 
 export default function AdminPanel() {
+  const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState<FlowType>('undergraduate');
   
@@ -554,6 +556,19 @@ export default function AdminPanel() {
     input.click();
   };
 
+  // Logout handler
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/admin/auth', {
+        method: 'DELETE',
+      });
+      router.push('/admin/login');
+      router.refresh();
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
@@ -585,6 +600,13 @@ export default function AdminPanel() {
                 title="Reset to original flow"
               >
                 Reset Flow
+              </button>
+              <button
+                onClick={handleLogout}
+                className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
+                title="Logout"
+              >
+                Logout
               </button>
             </div>
           </div>
