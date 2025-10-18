@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "COE Husky Bot",
-  description: "Northeastern University College of Engineering AI Advising Assistant - Get quick answers to your academic advising questions 24/7",
+  title: "COE Advising Bot",
+  description: "Northeastern University College of Engineering Advising Bot - Resource Navigator for quick answers to your academic advising questions 24/7",
   icons: {
     icon: "/husky_logo.svg",
     shortcut: "/husky_logo.svg",
