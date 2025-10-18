@@ -10,8 +10,7 @@ const userBubbleStyle = 'bg-black text-white';
 const optionButtonStyle = 'bg-white text-black border-2 border-black hover:bg-black hover:text-white';
 
 const ChatbotWidget: React.FC = () => {
-  const [open, setOpen] = useState(false);
-  const { currentNode, history, goToNode, goBack, reset, loadFlowData } = useChatbotStore();
+  const { currentNode, history, goToNode, goBack, reset, loadFlowData, isOpen, setIsOpen } = useChatbotStore();
   const [typing, setTyping] = useState(false);
   const chatEndRef = React.useRef<HTMLDivElement>(null);
 
@@ -22,20 +21,20 @@ const ChatbotWidget: React.FC = () => {
 
   // Simulate typing indicator for bot responses
   React.useEffect(() => {
-    if (open && history.length > 0) {
+    if (isOpen && history.length > 0) {
       setTyping(true);
       const timer = setTimeout(() => setTyping(false), 500);
       return () => clearTimeout(timer);
     }
     setTyping(false);
-  }, [currentNode.id, open, history.length]);
+  }, [currentNode.id, isOpen, history.length]);
 
   // Auto-scroll to bottom when history or currentNode changes
   React.useEffect(() => {
-    if (open && chatEndRef.current) {
+    if (isOpen && chatEndRef.current) {
       chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [history, currentNode, open]);
+  }, [history, currentNode, isOpen]);
 
   // Helper to extract and format links from text and handle line breaks
   const formatMessageWithLinks = (message: string) => {
@@ -108,10 +107,10 @@ const ChatbotWidget: React.FC = () => {
   return (
     <div className="fixed bottom-6 right-6 z-50">
       {/* Floating Button */}
-      {!open && (
+      {!isOpen && (
         <button
           className="relative bg-white rounded-full shadow-2xl p-4 hover:shadow-3xl transition-all duration-500 focus:outline-none focus:ring-4 focus:ring-red-400 overflow-hidden group animate-pulse"
-          onClick={() => setOpen(true)}
+          onClick={() => setIsOpen(true)}
           aria-label="Open COE Bot"
           style={{
             boxShadow: '0 0 20px rgba(220, 38, 38, 0.3), 0 0 40px rgba(220, 38, 38, 0.2), 0 0 60px rgba(220, 38, 38, 0.1)',
@@ -126,7 +125,7 @@ const ChatbotWidget: React.FC = () => {
         </button>
       )}
       {/* Chat Window */}
-      {open && (
+      {isOpen && (
         <div className="w-96 max-w-[95vw] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-fade-in border border-gray-200">
           {/* Header - Black background like in the image */}
           <div className="flex items-center justify-between px-6 py-4 bg-black">
@@ -148,7 +147,7 @@ const ChatbotWidget: React.FC = () => {
               )}
               <button
                 className="text-white hover:text-red-200 focus:outline-none text-2xl font-bold"
-                onClick={() => setOpen(false)}
+                onClick={() => setIsOpen(false)}
                 aria-label="Close Chatbot"
               >
                 ✕

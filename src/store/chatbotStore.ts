@@ -13,6 +13,9 @@ interface ChatbotState {
   dataSource: 'supabase' | 'hardcoded' | 'loading';
   isLoading: boolean;
   error: string | null;
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+  toggleOpen: () => void;
   loadFlowData: () => Promise<void>;
   goToNode: (nodeId: string, selectedOptionLabel?: string) => void;
   goBack: () => void;
@@ -26,6 +29,11 @@ export const useChatbotStore = create<ChatbotState>((set, get) => ({
   dataSource: 'hardcoded',
   isLoading: false,
   error: null,
+  isOpen: false,
+  
+  setIsOpen: (isOpen) => set({ isOpen }),
+  
+  toggleOpen: () => set((state) => ({ isOpen: !state.isOpen })),
   
   loadFlowData: async () => {
     set({ isLoading: true, error: null });
