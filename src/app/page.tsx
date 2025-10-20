@@ -155,16 +155,14 @@ export default function Home() {
             Your input helps us continuously improve our service. 
             Students can submit feedback through our feedback form to help enhance the advising bot experience.
           </p>
-          <div className="text-center">
-            <a
-              href="https://northeastern.sharepoint.com/sites/Polinapersonal/SitePages/Advising-Chatbot-Testing-Page.aspx?promotedState=0&source=FromAppBar&Mode=Edit"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center px-10 py-5 bg-gradient-to-r from-red-600 to-red-700 text-white font-bold text-lg rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 border-2 border-red-500"
-            >
-              <span className="mr-3">📝</span>
-              Submit Feedback (SharePoint)
-            </a>
+          <div className="flex justify-center">
+            <iframe 
+              width="900" 
+              height="600" 
+              src="https://app.smartsheet.com/b/form/4b52039d85b3429284802b70f232e618"
+              className="rounded-xl shadow-lg border-2 border-red-300 max-w-full"
+              title="Student Feedback Form"
+            />
           </div>
         </div>
       </main>
