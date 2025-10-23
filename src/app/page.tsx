@@ -54,7 +54,7 @@ export default function Home() {
                 More personalized questions related to curriculum planning are best addressed by your academic advisor.
               </p>
               <p>
-                To get started, click the bot icon located in the bottom left corner of your screen and select your student status 
+                To get started, click the bot icon located in the bottom right corner of your screen and select your student status 
                 (undergraduate or graduate). Then follow the prompts to find the information you need. If you select the wrong option 
                 or want to return to the main menu, click &ldquo;back&rdquo; or &ldquo;start over.&rdquo;
               </p>
